@@ -16,7 +16,7 @@ CIRCLE_SIZE = 2  # The size of the indicator circle we want
 
 class Resource(DisplayObject):
     """
-    Class to generate information for a shiprweck object in memory
+    Class to generate information for a resource object in memory
     """
 
     def __init__(self, memory_reader, actor_id, address, my_coords, raw_name):

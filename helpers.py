@@ -17,50 +17,54 @@ from pyglet.text import Label
 # N = to do
 # ~ = working but incomplete/unsatisfactory
 CONFIG = {
-    "DEBUG_ENABLED": False,  # ~
 
-    "CREWS_ENABLED": True,  # Y
-    "SHIPS_ENABLED": True,  # Y
-
-    "GEMS_ENABLED": True,  # Y
-    "SKULLS_ENABLED": True,  # Y
-    "MERCHANT_LOOT_ENABLED": True,  # ~
-    "GH_RELICS_ENABLED": True,  # N
-    "GH_CHESTS_ENABLED": True,  # N
-    "RARE_LOOT_ENABLED": True,  # N
-    "SEA_FORT_POUCH_ENABLED": True,  # N
-    "GUNPOWDER_ENABLED": True,  # N
-
-    "RESOURCES_ENABLED": True,  # Y
-    "ROWBOATS_ENABLED": True,  # N
-    "ANIMAL_CONTAINER_ENABLED": False,  # N
-    "TRIDENTS_ENABLED": False,  # N
-
-    "REAPER_LOOT_ENABLED": False,  # N
-    "GIFTS_ENABLED": False,  # N
-    "TOMES_ENABLED": False,  # N
-    "EMISSARY_FLAGS_ENABLED": False,  # N
-
-    "MEDALLIONS_ENABLED": True,  # N
-    "EVENT_KEYS_ENABLED": True,  # N
-    "ASHEN_KEY_ENABLED": True,  # N
-    "GENERAL_KEYS_ENABLED": True,  # N
-
+    # AI
     "AIDROPS_ENABLED": True,  # Y
-    "STATUES_ENABLED": True,  # N
-    "OCEANAI_ENABLED": True,  # N
-    "LANDAI_ENABLED": True,  # N
+    "ASHEN_LORD_ENABLED": False,  # Y
+    "LANDAI_ENABLED": True,  # Y
+    "OCEANAI_ENABLED": True,  # Y
+    "STATUES_ENABLED": True,  # Y
 
-    "EVENTS_ENABLED": False,  # N
-    "ASHEN_LORD_ENABLED": True,  # N
+    # Loot
+    "ANIMAL_CONTAINER_ENABLED": False,  # Y
+    "ASHEN_KEY_ENABLED": True,  # Y
+    "EMISSARY_FLAGS_ENABLED": False,  # Y
+    "EVENT_KEYS_ENABLED": True,  # Y
+    "GEMS_ENABLED": True,  # Y
+    "GENERAL_KEYS_ENABLED": True,  # Y
+    "GH_CHESTS_ENABLED": True,  # Y
+    "GH_RELICS_ENABLED": True,  # Y
+    "GIFTS_ENABLED": False,  # Y
+    "GUNPOWDER_ENABLED": True,  # Y
+    "MEDALLIONS_ENABLED": True,  # Y
+    "MERCHANT_LOOT_ENABLED": True,  # Y
+    "RARE_LOOT_ENABLED": True,  # Y
+    "REAPER_LOOT_ENABLED": False,  # Y
+    "RESOURCES_ENABLED": True,  # Y
+    "SEA_FORT_POUCH_ENABLED": True,  # Y
+    "SKULLS_ENABLED": True,  # Y
+    "TOMES_ENABLED": False,  # Y
+    "TRIDENTS_ENABLED": False,  # Y
 
+    # Map
+    "EVENTS_ENABLED": False,  # Y
     "ISLANDS_ENABLED": False,  # N
+    "LOOT_MERMAIDS_ENABLED": False,  # Y
+    "MEGS_ENABLED": True,  # Y
     "OUTPOSTS_ENABLED": False,  # N
+    "STORM_ENABLED": False,  # Y
+
+    # Players
+    "CREWS_ENABLED": True,  # Y
+    "MERMAIDS_ENABLED": True,  # Y
+
+    # Ships
+    "ROWBOATS_ENABLED": True,  # Y
+    "SHIPS_ENABLED": True,  # Y
     "SHIPWRECKS_ENABLED": True,  # Y
-    "MERMAID_ENABLED": False,  # N
-    "LOOT_MERMAID_ENABLED": False,  # N
-    "MEGS_ENABLED": True,  # N
-    "STORM_ENABLED": False  # N
+
+    # Other
+    "DEBUG_ENABLED": False  # ~
 }
 
 # Used to track unique crews

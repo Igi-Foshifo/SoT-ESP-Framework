@@ -5,19 +5,18 @@
 
 from pyglet.text import Label
 from pyglet.shapes import Circle
-from helpers import calculate_distance, object_to_screen, main_batch, \
-     TEXT_OFFSET_X, TEXT_OFFSET_Y
-from Modules.mapping import shipwrecks
+from helpers import calculate_distance, object_to_screen, main_batch, TEXT_OFFSET_X, TEXT_OFFSET_Y
+from Modules.mapping import storm
 from Modules.display_object import DisplayObject
 
-SHIPWRECK_COLOR = (255, 255, 255)
-SHIPWRECK_LABEL_COLOR = (255, 255, 255, 255)
-CIRCLE_SIZE = 5  # The size of the indicator circle we want
+STORM_COLOR = (255, 255, 255)
+STORM_LABEL_COLOR = (255, 255, 255, 255)
+CIRCLE_SIZE = 3  # The size of the indicator circle we want
 
 
-class Shipwreck(DisplayObject):
+class Storm(DisplayObject):
     """
-    Class to generate information for a shiprweck object in memory
+    Class to generate information for a storm object in memory
     """
 
     def __init__(self, memory_reader, actor_id, address, my_coords, raw_name):
@@ -30,7 +29,7 @@ class Shipwreck(DisplayObject):
         "raw" name to a more readable name per our Mappings. We also create
         a circle and label and add it to our batch for display to the screen.
 
-        All of this data represents a "Shipwreck". If you want to add more, you will
+        All of this data represents a "Storm". If you want to add more, you will
         need to add another class variable under __init__ and in the update()
         function
 
@@ -48,8 +47,8 @@ class Shipwreck(DisplayObject):
         self.my_coords = my_coords
         self.raw_name = raw_name
 
-        # Generate our shipwreck's info
-        self.name = shipwrecks.get(self.raw_name).get("Name")
+        # Generate our storm's info
+        self.name = storm.get(self.raw_name).get("Name")
         self.coords = self._coord_builder(self.actor_root_comp_ptr,
                                           self.coord_offset)
         self.distance = calculate_distance(self.coords, self.my_coords)
@@ -57,7 +56,7 @@ class Shipwreck(DisplayObject):
         self.screen_coords = object_to_screen(self.my_coords, self.coords)
 
         # All of our actual display information & rendering
-        self.color = SHIPWRECK_COLOR
+        self.color = STORM_COLOR
         self.text_str = self._built_text_string()
         self.text_render = self._build_text_render()
         self.icon = self._build_circle_render()
@@ -79,7 +78,7 @@ class Shipwreck(DisplayObject):
 
     def _built_text_string(self) -> str:
         """
-        Generates a string used for rendering. Separate function in the event
+        Generates a string used for rendering. Separate function in the storm
         you need to add more data (Sunk %, hole count, etc)
         """
         return f"{self.name} - {self.distance}m"
@@ -92,20 +91,20 @@ class Shipwreck(DisplayObject):
         Assigns the object to our batch & group
 
         :rtype: Label
-        :return: What text we want displayed next to the shipwreck
+        :return: What text we want displayed next to the storm
         """
         if self.screen_coords:
             return Label(self.text_str,
-                         color=SHIPWRECK_LABEL_COLOR,
+                         color=STORM_LABEL_COLOR,
                          x=self.screen_coords[0] + TEXT_OFFSET_X,
                          y=self.screen_coords[1] + TEXT_OFFSET_Y,
                          batch=main_batch)
 
-        return Label(self.text_str, color=SHIPWRECK_LABEL_COLOR, x=0, y=0, batch=main_batch)
+        return Label(self.text_str, color=STORM_LABEL_COLOR, x=0, y=0, batch=main_batch)
 
     def update(self, my_coords: dict):
         """
-        A generic method to update all the interesting data about a shipwreck
+        A generic method to update all the interesting data about a storm
         object, to be called when seeking to perform an update on the
         Actor without doing a full-scan of all actors in the game.
 

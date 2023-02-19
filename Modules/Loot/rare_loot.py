@@ -6,16 +6,17 @@
 from pyglet.text import Label
 from pyglet.shapes import Circle
 from helpers import calculate_distance, object_to_screen, main_batch, TEXT_OFFSET_X, TEXT_OFFSET_Y
-from Modules.mapping import ships
+from Modules.mapping import rareloot
 from Modules.display_object import DisplayObject
 
-SHIP_COLOR = (100, 0, 0)  # The color we want the indicator circle to be
-CIRCLE_SIZE = 10  # The size of the indicator circle we want
+RARE_LOOT_COLOR = (0, 255, 255)
+RARE_LOOT_LABEL_COLOR = (0, 255, 255, 255)
+CIRCLE_SIZE = 3  # The size of the indicator circle we want
 
 
-class Ship(DisplayObject):
+class RareLoot(DisplayObject):
     """
-    Class to generate information for a ship object in memory
+    Class to generate information for a rare loot object in memory
     """
 
     def __init__(self, memory_reader, actor_id, address, my_coords, raw_name):
@@ -28,7 +29,7 @@ class Ship(DisplayObject):
         "raw" name to a more readable name per our Mappings. We also create
         a circle and label and add it to our batch for display to the screen.
 
-        All of this data represents a "Ship". If you want to add more, you will
+        All of this data represents a "Rare Loot Item". If you want to add more, you will
         need to add another class variable under __init__ and in the update()
         function
 
@@ -46,8 +47,8 @@ class Ship(DisplayObject):
         self.my_coords = my_coords
         self.raw_name = raw_name
 
-        # Generate our Ship's info
-        self.name = ships.get(self.raw_name).get("Name")
+        # Generate our rare loot's info
+        self.name = rareloot.get(self.raw_name).get("Name")
         self.coords = self._coord_builder(self.actor_root_comp_ptr,
                                           self.coord_offset)
         self.distance = calculate_distance(self.coords, self.my_coords)
@@ -55,7 +56,7 @@ class Ship(DisplayObject):
         self.screen_coords = object_to_screen(self.my_coords, self.coords)
 
         # All of our actual display information & rendering
-        self.color = SHIP_COLOR
+        self.color = RARE_LOOT_COLOR
         self.text_str = self._built_text_string()
         self.text_render = self._build_text_render()
         self.icon = self._build_circle_render()
@@ -73,7 +74,7 @@ class Ship(DisplayObject):
             return Circle(self.screen_coords[0], self.screen_coords[1],
                           CIRCLE_SIZE, color=self.color, batch=main_batch)
 
-        return Circle(0, 0, 10, color=self.color, batch=main_batch)
+        return Circle(0, 0, CIRCLE_SIZE, color=self.color, batch=main_batch)
 
     def _built_text_string(self) -> str:
         """
@@ -90,19 +91,20 @@ class Ship(DisplayObject):
         Assigns the object to our batch & group
 
         :rtype: Label
-        :return: What text we want displayed next to the ship
+        :return: What text we want displayed next to the rare loot
         """
         if self.screen_coords:
             return Label(self.text_str,
+                         color=RARE_LOOT_LABEL_COLOR,
                          x=self.screen_coords[0] + TEXT_OFFSET_X,
                          y=self.screen_coords[1] + TEXT_OFFSET_Y,
                          batch=main_batch)
 
-        return Label(self.text_str, x=0, y=0, batch=main_batch)
+        return Label(self.text_str, color=RARE_LOOT_LABEL_COLOR, x=0, y=0, batch=main_batch)
 
     def update(self, my_coords: dict):
         """
-        A generic method to update all the interesting data about a ship
+        A generic method to update all the interesting data about a rare loot
         object, to be called when seeking to perform an update on the
         Actor without doing a full-scan of all actors in the game.
 
@@ -127,17 +129,12 @@ class Ship(DisplayObject):
         self.screen_coords = object_to_screen(self.my_coords, self.coords)
 
         if self.screen_coords:
-            # Ships have two actors dependant on distance. This switches them
-            # seamlessly at 1750m
-            # if "Near" in self.name and new_distance > 1750:
-            #     self.text_render.visible = False
-            #     self.icon.visible = False
-            # elif "Near" not in self.name and new_distance < 1750:
-            #     self.text_render.visible = False
-            #     self.icon.visible = False
-            # else:
-            self.text_render.visible = True
-            self.icon.visible = True
+            if new_distance < 500:
+                self.text_render.visible = True
+                self.icon.visible = True
+            else:
+                self.text_render.visible = False
+                self.icon.visible = False
 
             # Update the position of our circle and text
             self.icon.x = self.screen_coords[0]

@@ -5,13 +5,12 @@
 
 from pyglet.text import Label
 from pyglet.shapes import Circle
-from helpers import calculate_distance, object_to_screen, main_batch, \
-     TEXT_OFFSET_X, TEXT_OFFSET_Y
+from helpers import calculate_distance, object_to_screen, main_batch, TEXT_OFFSET_X, TEXT_OFFSET_Y
 from Modules.mapping import merchantcrates
 from Modules.display_object import DisplayObject
 
-MERCH_LOOT_COLOR = (102, 0, 204)
-MERCH_LOOT_LABEL_COLOR = (102, 0, 204, 255)
+MERCH_LOOT_COLOR = (51, 51, 255)
+MERCH_LOOT_LABEL_COLOR = (51, 51, 255, 255)
 CIRCLE_SIZE = 3  # The size of the indicator circle we want
 
 

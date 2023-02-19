@@ -5,18 +5,17 @@
 
 from pyglet.text import Label
 from pyglet.shapes import Circle
-from helpers import calculate_distance, object_to_screen, main_batch, \
-     TEXT_OFFSET_X, TEXT_OFFSET_Y
+from helpers import calculate_distance, object_to_screen, main_batch, TEXT_OFFSET_X, TEXT_OFFSET_Y
 from Modules.mapping import islands
 from Modules.display_object import DisplayObject
 
 ISLAND_COLOR = (255, 255, 255)
-CIRCLE_SIZE = 6  # The size of the indicator circle we want
+CIRCLE_SIZE = 5  # The size of the indicator circle we want
 
 
 class Island(DisplayObject):
     """
-    Class to generate information for a island object in memory
+    Class to generate information for an island object in memory
     """
 
     def __init__(self, memory_reader, actor_id, address, my_coords, raw_name):

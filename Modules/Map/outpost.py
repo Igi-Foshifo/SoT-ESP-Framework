@@ -5,13 +5,12 @@
 
 from pyglet.text import Label
 from pyglet.shapes import Circle
-from helpers import calculate_distance, object_to_screen, main_batch, \
-     TEXT_OFFSET_X, TEXT_OFFSET_Y
+from helpers import calculate_distance, object_to_screen, main_batch, TEXT_OFFSET_X, TEXT_OFFSET_Y
 from Modules.mapping import outposts
 from Modules.display_object import DisplayObject
 
 OUTPOST_COLOR = (255, 255, 255)  # The color we want the indicator circle to be
-CIRCLE_SIZE = 4  # The size of the indicator circle we want
+CIRCLE_SIZE = 5  # The size of the indicator circle we want
 
 
 class Outpost(DisplayObject):
