@@ -7,10 +7,25 @@ For community support, please contact me on Discord: DougTheDruid#2784
 import struct
 import logging
 from memory_helper import ReadMemory
-from mapping import ship_keys
 from helpers import OFFSETS, CONFIG, logger
-from Modules.ship import Ship
-from Modules.crews import Crews
+from Modules.mapping import ship_keys, \
+    gem_keys, \
+    skull_keys, \
+    shipwreck_keys, \
+    resource_keys, \
+    ai_common_drops_keys
+
+from Modules.Ships.ship import Ship
+
+from Modules.Players.crews import Crews
+
+from Modules.Loot.gem import Gem
+from Modules.Loot.skull import Skull
+from Modules.Loot.resource import Resource
+
+from Modules.Map.shipwreck import Shipwreck
+
+from Modules.AI.ai_common_drop import AICommonDrop
 
 
 class SoTMemoryReader:
@@ -185,16 +200,24 @@ class SoTMemoryReader:
             # Ignore anything we cannot find a name for
             if not raw_name:
                 continue
+            
+            
+            # --------------- PARSE ENABLED OPTIONS ---------------#
+            
+            # Debug visual GUI for display all actors within 500m
+            if CONFIG.get('DEBUG_ENABLED'):
+                if "BP_" in raw_name:
+                    # debug = Debug(self.rm, actor_id, actor_address, self.my_coords, raw_name)
+                    # if debug.distance < 500:
+                    #     self.display_objects.append(debug)
+                    print(raw_name)
+                    continue
 
             # If we have Ship ESP enabled in helpers.py, and the name of the
             # actor is in our mapping.py ship_keys object, interpret the actor
             # as a ship
             if CONFIG.get('SHIPS_ENABLED') and raw_name in ship_keys:
-                ship = Ship(self.rm, actor_id, actor_address, self.my_coords,
-                            raw_name)
-                # if "Near" not in ship.name and ship.distance < 1720:
-                #     continue
-                # else:
+                ship = Ship(self.rm, actor_id, actor_address, self.my_coords, raw_name)
                 self.display_objects.append(ship)
 
             # If we have the crews data enabled in helpers.py and the name
@@ -202,5 +225,60 @@ class SoTMemoryReader:
             # data to generate information about people on the server
             # NOTE: This will NOT give us information on nearby players for the
             # sake of ESP
-            elif CONFIG.get('CREWS_ENABLED') and raw_name == "CrewService":
+            if CONFIG.get('CREWS_ENABLED') and raw_name == "CrewService":
                 self.crew_data = Crews(self.rm, actor_id, actor_address)
+                
+            # If we have gem ESP enabled in helpers.py, and the name of the
+            # actor is in our mapping.py gem_keys object, interpret the actor
+            # as a gem
+            if CONFIG.get('GEMS_ENABLED') and raw_name in gem_keys:
+                gem = Gem(self.rm, actor_id, actor_address, self.my_coords, raw_name)
+                if gem.distance < 500:
+                    self.display_objects.append(gem)
+                    
+            # If we have gem ESP enabled in helpers.py, and the name of the
+            # actor is in our mapping.py shipwreck_keys object, interpret the actor
+            # as a shipwreck
+            if CONFIG.get('SHIPWRECKS_ENABLED') and raw_name in shipwreck_keys:
+                shipwreck = Shipwreck(self.rm, actor_id, actor_address, self.my_coords, raw_name)
+                self.display_objects.append(shipwreck)
+                
+            # If we have gem ESP enabled in helpers.py, and the name of the
+            # actor is in our mapping.py skull_keys object, interpret the actor
+            # as a skull
+            if CONFIG.get('SKULLS_ENABLED') and raw_name in skull_keys:
+                skull = Skull(self.rm, actor_id, actor_address, self.my_coords, raw_name)
+                if skull.distance < 500:
+                    self.display_objects.append(skull)
+
+            # If we have gem ESP enabled in helpers.py, and the name of the
+            # actor is in our mapping.py resource_keys object, interpret the actor
+            # as a resource
+            if CONFIG.get('RESOURCES_ENABLED') and raw_name in resource_keys:
+                resource = Resource(self.rm, actor_id, actor_address, self.my_coords, raw_name)
+                if resource.distance < 500:
+                    self.display_objects.append(resource)
+
+            # If we have gem ESP enabled in helpers.py, and the name of the
+            # actor is in our mapping.py ai_common_drops_keys object, interpret the actor
+            # as a drop
+            if CONFIG.get('AIDROPS_ENABLED') and raw_name in ai_common_drops_keys:
+                ai_drop = AICommonDrop(self.rm, actor_id, actor_address, self.my_coords, raw_name)
+                if ai_drop.distance < 500:
+                    self.display_objects.append(ai_drop)
+            
+            # If we have gem ESP enabled in helpers.py, and the name of the
+            # actor is in our mapping.py island_keys object, interpret the actor
+            # as an island
+            # if CONFIG.get('ISLANDS_ENABLED') and raw_name in island_keys:
+            #     # island = Island(self.rm, actor_id, actor_address, self.my_coords, raw_name)
+            #     # self.display_objects.append(island)
+            #     continue
+                
+            # If we have gem ESP enabled in helpers.py, and the name of the
+            # actor is in our mapping.py outpost_keys object, interpret the actor
+            # as an outpost
+            # if CONFIG.get('OUTPOSTS_ENABLED') and raw_name in outpost_keys:
+            #     # outpost = Outpost(self.rm, actor_id, actor_address, self.my_coords, raw_name)
+            #     # self.display_objects.append(outpost)
+            #     continue

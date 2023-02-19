@@ -101,6 +101,7 @@ class Crews(DisplayObject):
                 crews_data.append(crew_data)
                 if crew_guid not in crew_tracker:
                     crew_tracker[crew_guid] = len(crew_tracker)+1
+                    
         return crews_data
 
     def update(self, my_coords):  # pylint: disable=unused-argument
@@ -116,5 +117,6 @@ class Crews(DisplayObject):
         if self._get_actor_id(self.address) != self.actor_id:
             self.to_delete = True
             return
+        
         self.crew_info = self._get_crews_info()
         self.crew_str = self._built_text_string()

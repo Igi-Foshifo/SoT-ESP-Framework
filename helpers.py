@@ -12,9 +12,55 @@ from pyglet.graphics import Batch
 from pyglet.text import Label
 
 # True=Enabled & False=Disabled for each relevant config items
+# Below denotes mappings exist but not necessarily the module
+# Y = implemented
+# N = to do
+# ~ = working but incomplete/unsatisfactory
 CONFIG = {
-    "CREWS_ENABLED": True,
-    "SHIPS_ENABLED": False
+    "DEBUG_ENABLED": False,  # ~
+
+    "CREWS_ENABLED": True,  # Y
+    "SHIPS_ENABLED": True,  # Y
+
+    "GEMS_ENABLED": True,  # Y
+    "SKULLS_ENABLED": True,  # Y
+    "MERCHANT_LOOT_ENABLED": True,  # ~
+    "GH_RELICS_ENABLED": True,  # N
+    "GH_CHESTS_ENABLED": True,  # N
+    "RARE_LOOT_ENABLED": True,  # N
+    "SEA_FORT_POUCH_ENABLED": True,  # N
+    "GUNPOWDER_ENABLED": True,  # N
+
+    "RESOURCES_ENABLED": True,  # Y
+    "ROWBOATS_ENABLED": True,  # N
+    "ANIMAL_CONTAINER_ENABLED": False,  # N
+    "TRIDENTS_ENABLED": False,  # N
+
+    "REAPER_LOOT_ENABLED": False,  # N
+    "GIFTS_ENABLED": False,  # N
+    "TOMES_ENABLED": False,  # N
+    "EMISSARY_FLAGS_ENABLED": False,  # N
+
+    "MEDALLIONS_ENABLED": True,  # N
+    "EVENT_KEYS_ENABLED": True,  # N
+    "ASHEN_KEY_ENABLED": True,  # N
+    "GENERAL_KEYS_ENABLED": True,  # N
+
+    "AIDROPS_ENABLED": True,  # Y
+    "STATUES_ENABLED": True,  # N
+    "OCEANAI_ENABLED": True,  # N
+    "LANDAI_ENABLED": True,  # N
+
+    "EVENTS_ENABLED": False,  # N
+    "ASHEN_LORD_ENABLED": True,  # N
+
+    "ISLANDS_ENABLED": False,  # N
+    "OUTPOSTS_ENABLED": False,  # N
+    "SHIPWRECKS_ENABLED": True,  # Y
+    "MERMAID_ENABLED": False,  # N
+    "LOOT_MERMAID_ENABLED": False,  # N
+    "MEGS_ENABLED": True,  # N
+    "STORM_ENABLED": False  # N
 }
 
 # Used to track unique crews
@@ -183,7 +229,12 @@ def initialize_window():
     """
     Initializes our window with a given label
     """
-    b_label = Label(b64decode('RG91Z1RoZURydWlkJ3MgRVNQIEZyYW1ld29yaw==').decode("utf-8"),
+    # b_label = Label(b64decode('RG91Z1RoZURydWlkJ3MgRVNQIEZyYW1ld29yaw==').decode("utf-8"),
+    #                 x=SOT_WINDOW_W - 537, y=10, font_size=24, bold=True,
+    #                 color=(127, 127, 127, 65), batch=main_batch)
+    
+    b_label = Label("",
                     x=SOT_WINDOW_W - 537, y=10, font_size=24, bold=True,
                     color=(127, 127, 127, 65), batch=main_batch)
+    
     return b_label

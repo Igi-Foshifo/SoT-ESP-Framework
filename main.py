@@ -7,8 +7,7 @@ from base64 import b64decode
 import pyglet
 from pyglet.text import Label
 from pyglet.gl import Config
-from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, \
-    version, logger, initialize_window
+from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, version, logger, initialize_window
 from sot_hack import SoTMemoryReader
 
 
@@ -59,10 +58,11 @@ def update_graphics(_):
 
 
 if __name__ == '__main__':
-    logger.info(
-        b64decode("RG91Z1RoZURydWlkJ3MgRVNQIEZyYW1ld29yayBTdGFydGluZw==").decode("utf-8")
-    )
-    logger.info(f"Hack Version: {version}")
+    # logger.info(
+    #     b64decode("RG91Z1RoZURydWlkJ3MgRVNQIEZyYW1ld29yayBTdGFydGluZw==").decode("utf-8")
+    # )
+    logger.info("")
+    #logger.info(f"Hack Version: {version}")
 
     # Initialize our SoT Hack object, and do a first run of reading actors
     smr = SoTMemoryReader()
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     # Create an overlay window with Pyglet at the same size as our SoT Window
     window = pyglet.window.Window(SOT_WINDOW_W, SOT_WINDOW_H,
                                   vsync=False, style='overlay', config=config,
-                                  caption="DougTheDruid's ESP Framework")
+                                  caption="")
     hwnd = window._hwnd  # pylint: disable=protected-access
 
     # Move our window to the same location that our SoT Window is at
@@ -98,7 +98,7 @@ if __name__ == '__main__':
         # Update our player count Label & crew list
         if smr.crew_data:
             player_count.text = f"Player Count: {smr.crew_data.total_players}"
-            # crew_list.text = smr.crew_data.crew_str
+            crew_list.text = smr.crew_data.crew_str
 
         # Draw our main batch & FPS counter at the bottom left
         main_batch.draw()
@@ -130,10 +130,9 @@ if __name__ == '__main__':
 
     # The label for showing all players on the server under the count
     # This purely INITIALIZES it does not inherently update automatically
-    if False:  # pylint: disable=using-constant-test
-        crew_list = Label("", x=SOT_WINDOW_W * 0.85,
-                          y=(SOT_WINDOW_H-25) * 0.9, batch=main_batch, width=300,
-                          multiline=True)
+    crew_list = Label("", x=SOT_WINDOW_W * 0.85,
+                        y=(SOT_WINDOW_H-25) * 0.9, batch=main_batch, width=300,
+                        multiline=True)
         # Note: The width of 300 is the max pixel width of a single line
         # before auto-wrapping the text to the next line. Updated in on_draw()
 
