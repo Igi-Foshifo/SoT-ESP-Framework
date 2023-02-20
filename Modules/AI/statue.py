@@ -5,7 +5,8 @@
 
 from pyglet.text import Label
 from pyglet.shapes import Circle
-from helpers import calculate_distance, object_to_screen, main_batch, TEXT_OFFSET_X, TEXT_OFFSET_Y
+from helpers import calculate_distance, object_to_screen, main_batch, \
+    TEXT_OFFSET_X, TEXT_OFFSET_Y, TEXT_DPI, TEXT_FONT_NAME, TEXT_FONT_SIZE
 from Modules.mapping import statues
 from Modules.display_object import DisplayObject
 
@@ -122,23 +123,33 @@ class Statue(DisplayObject):
             if "Ruby" in self.name:
                 return Label(self.text_str,
                              color=RUBY_LABEL_COLOR,
+                             font_name=TEXT_FONT_NAME,
+                             font_size=TEXT_FONT_SIZE,
                              x=self.screen_coords[0] + TEXT_OFFSET_X,
                              y=self.screen_coords[1] + TEXT_OFFSET_Y,
+                             dpi=TEXT_DPI,
                              batch=main_batch)
             elif "Sapphire" in self.name:
                 return Label(self.text_str,
                              color=SAPPHIRE_LABEL_COLOR,
+                             font_name=TEXT_FONT_NAME,
+                             font_size=TEXT_FONT_SIZE,
                              x=self.screen_coords[0] + TEXT_OFFSET_X,
                              y=self.screen_coords[1] + TEXT_OFFSET_Y,
+                             dpi=TEXT_DPI,
                              batch=main_batch)
             elif "Emerald" in self.name:
                 return Label(self.text_str,
                              color=EMERALD_LABEL_COLOR,
+                             font_name=TEXT_FONT_NAME,
+                             font_size=TEXT_FONT_SIZE,
                              x=self.screen_coords[0] + TEXT_OFFSET_X,
                              y=self.screen_coords[1] + TEXT_OFFSET_Y,
+                             dpi=TEXT_DPI,
                              batch=main_batch)
 
-        return Label(self.text_str, color=self.labelColor, x=0, y=0, batch=main_batch)
+        return Label(self.text_str, color=self.labelColor,
+                     font_name=TEXT_FONT_NAME, font_size=TEXT_FONT_SIZE, x=0, y=0, dpi=TEXT_DPI, batch=main_batch)
 
     def update(self, my_coords: dict):
         """

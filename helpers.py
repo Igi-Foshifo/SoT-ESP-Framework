@@ -80,6 +80,9 @@ logger = logging.getLogger()
 # Offset values for the text labels from the circles we draw to the screen
 TEXT_OFFSET_X = 13
 TEXT_OFFSET_Y = -5
+TEXT_DPI = 300
+TEXT_FONT_NAME = "Calibri"
+TEXT_FONT_SIZE = 4
 
 # Information on SoT height and width. Used here and in main.py to display
 # data to the screen. May need to manually override if wonky

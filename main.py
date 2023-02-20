@@ -119,22 +119,37 @@ if __name__ == '__main__':
 
     # Adds an FPS counter at the bottom left corner of our pyglet window
     # Note: May not translate to actual FPS, but rather FPS of the program
-    fps_display = pyglet.window.FPSDisplay(window)
+    fps_display = pyglet.window.FPSDisplay(window, color=(0, 255, 0, 255))
 
     # Our base player_count label in the top-right of our screen. Updated
     # in on_draw(). Use a default of "Initializing", which will update once the
     # hack is actually running
     player_count = Label("...Initializing Framework...",
-                         x=SOT_WINDOW_W * 0.85,
-                         y=SOT_WINDOW_H * 0.9, batch=main_batch)
+                         x=SOT_WINDOW_W * 0.91,
+                         y=SOT_WINDOW_H * 0.7,
+                         batch=main_batch)
+
+    crosshair = Label("+",
+                      font_size=15,
+                      color=(0, 255, 0, 255),
+                      # x=SOT_WINDOW_W//2,
+                      # y=SOT_WINDOW_H//2,
+                      x=SOT_WINDOW_W * .5,
+                      y=SOT_WINDOW_H * .5,
+                      anchor_x="center",
+                      anchor_y="center",
+                      batch=main_batch)
 
     # The label for showing all players on the server under the count
     # This purely INITIALIZES it does not inherently update automatically
-    crew_list = Label("", x=SOT_WINDOW_W * 0.85,
-                        y=(SOT_WINDOW_H-25) * 0.9, batch=main_batch, width=300,
-                        multiline=True)
-        # Note: The width of 300 is the max pixel width of a single line
-        # before auto-wrapping the text to the next line. Updated in on_draw()
+    crew_list = Label("",
+                      x=SOT_WINDOW_W * 0.91,
+                      y=SOT_WINDOW_H * 0.68,
+                      batch=main_batch,
+                      width=300,
+                      multiline=True)
+    # Note: The width of 300 is the max pixel width of a single line
+    # before auto-wrapping the text to the next line. Updated in on_draw()
 
     # Runs our application, targeting a specific refresh rate (1/60 = 60fps)
     pyglet.app.run(interval=1/FPS_TARGET)

@@ -5,7 +5,8 @@
 
 from pyglet.text import Label
 from pyglet.shapes import Circle
-from helpers import calculate_distance, object_to_screen, main_batch
+from helpers import calculate_distance, object_to_screen, main_batch, \
+    TEXT_OFFSET_X, TEXT_OFFSET_Y, TEXT_DPI, TEXT_FONT_NAME, TEXT_FONT_SIZE
 from Modules.mapping import resources
 from Modules.display_object import DisplayObject
 
@@ -96,13 +97,15 @@ class Resource(DisplayObject):
         if self.screen_coords:
             return Label(self.text_str,
                          color=CRATE_LABEL_COLOR,
-                         # x=self.screen_coords[0] + TEXT_OFFSET_X,
-                         # y=self.screen_coords[1] + TEXT_OFFSET_Y,
-                         x=self.screen_coords[0],
-                         y=self.screen_coords[1],
+                         font_name=TEXT_FONT_NAME,
+                         font_size=TEXT_FONT_SIZE,
+                         x=self.screen_coords[0] + TEXT_OFFSET_X,
+                         y=self.screen_coords[1] + TEXT_OFFSET_Y,
+                         dpi=TEXT_DPI,
                          batch=main_batch)
 
-        return Label(self.text_str, color=CRATE_LABEL_COLOR, x=0, y=0, batch=main_batch)
+        return Label(self.text_str, color=CRATE_LABEL_COLOR,
+                     font_name=TEXT_FONT_NAME, font_size=TEXT_FONT_SIZE, x=0, y=0, dpi=TEXT_DPI, batch=main_batch)
 
     def update(self, my_coords: dict):
         """
@@ -133,7 +136,7 @@ class Resource(DisplayObject):
         if self.screen_coords:
             if new_distance < 500:
                 self.text_render.visible = True
-                self.icon.visible = False
+                self.icon.visible = True
             else:
                 self.text_render.visible = False
                 self.icon.visible = False
@@ -141,8 +144,8 @@ class Resource(DisplayObject):
             # Update the position of our circle and text
             self.icon.x = self.screen_coords[0]
             self.icon.y = self.screen_coords[1]
-            self.text_render.x = self.screen_coords[0]
-            self.text_render.y = self.screen_coords[1]
+            self.text_render.x = self.screen_coords[0] + TEXT_OFFSET_X
+            self.text_render.y = self.screen_coords[1] + TEXT_OFFSET_Y
 
             # Update our text to reflect out new distance
             self.distance = new_distance

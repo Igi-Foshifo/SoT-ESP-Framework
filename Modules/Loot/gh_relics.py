@@ -5,12 +5,13 @@
 
 from pyglet.text import Label
 from pyglet.shapes import Circle
-from helpers import calculate_distance, object_to_screen, main_batch, TEXT_OFFSET_X, TEXT_OFFSET_Y
+from helpers import calculate_distance, object_to_screen, main_batch, \
+    TEXT_OFFSET_X, TEXT_OFFSET_Y, TEXT_DPI, TEXT_FONT_NAME, TEXT_FONT_SIZE
 from Modules.mapping import ghrelics
 from Modules.display_object import DisplayObject
 
-GH_RELIC_COLOR = (204, 204, 0)
-GH_RELIC_LABEL_COLOR = (204, 204, 0, 255)
+GH_RELIC_COLOR = (255, 255, 0)
+GH_RELIC_LABEL_COLOR = (255, 255, 0, 255)
 CIRCLE_SIZE = 3  # The size of the indicator circle we want
 
 
@@ -96,11 +97,15 @@ class GHRelic(DisplayObject):
         if self.screen_coords:
             return Label(self.text_str,
                          color=GH_RELIC_LABEL_COLOR,
+                         font_name=TEXT_FONT_NAME,
+                         font_size=TEXT_FONT_SIZE,
                          x=self.screen_coords[0] + TEXT_OFFSET_X,
                          y=self.screen_coords[1] + TEXT_OFFSET_Y,
+                         dpi=TEXT_DPI,
                          batch=main_batch)
 
-        return Label(self.text_str, color=GH_RELIC_LABEL_COLOR, x=0, y=0, batch=main_batch)
+        return Label(self.text_str, color=GH_RELIC_LABEL_COLOR,
+                     font_name=TEXT_FONT_NAME, font_size=TEXT_FONT_SIZE, x=0, y=0, dpi=TEXT_DPI, batch=main_batch)
 
     def update(self, my_coords: dict):
         """

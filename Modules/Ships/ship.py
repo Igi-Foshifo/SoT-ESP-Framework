@@ -5,12 +5,13 @@
 
 from pyglet.text import Label
 from pyglet.shapes import Circle
-from helpers import calculate_distance, object_to_screen, main_batch, TEXT_OFFSET_X, TEXT_OFFSET_Y
+from helpers import calculate_distance, object_to_screen, main_batch, \
+    TEXT_OFFSET_X, TEXT_OFFSET_Y, TEXT_DPI, TEXT_FONT_NAME, TEXT_FONT_SIZE
 from Modules.mapping import ships
 from Modules.display_object import DisplayObject
 
 SHIP_COLOR = (100, 0, 0)  # The color we want the indicator circle to be
-CIRCLE_SIZE = 10  # The size of the indicator circle we want
+CIRCLE_SIZE = 5  # The size of the indicator circle we want
 
 
 class Ship(DisplayObject):
@@ -73,7 +74,7 @@ class Ship(DisplayObject):
             return Circle(self.screen_coords[0], self.screen_coords[1],
                           CIRCLE_SIZE, color=self.color, batch=main_batch)
 
-        return Circle(0, 0, 10, color=self.color, batch=main_batch)
+        return Circle(0, 0, CIRCLE_SIZE, color=self.color, batch=main_batch)
 
     def _built_text_string(self) -> str:
         """
@@ -94,11 +95,15 @@ class Ship(DisplayObject):
         """
         if self.screen_coords:
             return Label(self.text_str,
+                         font_name=TEXT_FONT_NAME,
+                         font_size=TEXT_FONT_SIZE,
                          x=self.screen_coords[0] + TEXT_OFFSET_X,
                          y=self.screen_coords[1] + TEXT_OFFSET_Y,
+                         dpi=TEXT_DPI,
                          batch=main_batch)
 
-        return Label(self.text_str, x=0, y=0, batch=main_batch)
+        return Label(self.text_str, font_name=TEXT_FONT_NAME, font_size=TEXT_FONT_SIZE,
+                     x=0, y=0, dpi=TEXT_DPI, batch=main_batch)
 
     def update(self, my_coords: dict):
         """
@@ -127,15 +132,6 @@ class Ship(DisplayObject):
         self.screen_coords = object_to_screen(self.my_coords, self.coords)
 
         if self.screen_coords:
-            # Ships have two actors dependant on distance. This switches them
-            # seamlessly at 1750m
-            # if "Near" in self.name and new_distance > 1750:
-            #     self.text_render.visible = False
-            #     self.icon.visible = False
-            # elif "Near" not in self.name and new_distance < 1750:
-            #     self.text_render.visible = False
-            #     self.icon.visible = False
-            # else:
             self.text_render.visible = True
             self.icon.visible = True
 

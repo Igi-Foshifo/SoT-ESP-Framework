@@ -59,7 +59,7 @@ class Crews(DisplayObject):
             # We store all of the crews in a tracker dictionary. This allows us
             # to assign each crew a "Short"-ID based on count on the server.
             short_id = crew_tracker.get(self.crew_info[x]['guid'], None)
-            output += f" Crew #{short_id} - {self.crew_info[x]['size']} Pirates\n"
+            output += f"Crew #{short_id} - {self.crew_info[x]['size']} Pirates\n"
 
         return output
 
@@ -83,7 +83,7 @@ class Crews(DisplayObject):
             crew_guid_raw = self.rm.read_bytes(crews[0] + (OFFSETS.get('Crew.Size') * x), 16)
             crew_guid = struct.unpack("<iiii", crew_guid_raw)
 
-            # Read the TArray of Players on the the specific Crew, used to determine
+            # Read the TArray of Players on the specific Crew, used to determine
             # Crew size
             crew_raw = self.rm.read_bytes(
                 crews[0] + OFFSETS.get('Crew.Players') + (OFFSETS.get('Crew.Size') * x), 16

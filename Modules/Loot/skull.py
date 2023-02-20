@@ -6,12 +6,12 @@
 from pyglet.text import Label
 from pyglet.shapes import Circle
 from helpers import calculate_distance, object_to_screen, main_batch, \
-     TEXT_OFFSET_X, TEXT_OFFSET_Y
+    TEXT_OFFSET_X, TEXT_OFFSET_Y, TEXT_DPI, TEXT_FONT_NAME, TEXT_FONT_SIZE
 from Modules.mapping import skulls
 from Modules.display_object import DisplayObject
 
-SKULL_COLOR = (102, 0, 204)
-SKULL_LABEL_COLOR = (102, 0, 204, 255)
+SKULL_COLOR = (127, 0, 255)
+SKULL_LABEL_COLOR = (127, 0, 255, 255)
 CIRCLE_SIZE = 5  # The size of the indicator circle we want
 
 
@@ -97,11 +97,15 @@ class Skull(DisplayObject):
         if self.screen_coords:
             return Label(self.text_str,
                          color=SKULL_LABEL_COLOR,
+                         font_name=TEXT_FONT_NAME,
+                         font_size=TEXT_FONT_SIZE,
                          x=self.screen_coords[0] + TEXT_OFFSET_X,
                          y=self.screen_coords[1] + TEXT_OFFSET_Y,
+                         dpi=TEXT_DPI,
                          batch=main_batch)
 
-        return Label(self.text_str, color=SKULL_LABEL_COLOR, x=0, y=0, batch=main_batch)
+        return Label(self.text_str, color=SKULL_LABEL_COLOR,
+                     font_name=TEXT_FONT_NAME, font_size=TEXT_FONT_SIZE, x=0, y=0, dpi=TEXT_DPI, batch=main_batch)
 
     def update(self, my_coords: dict):
         """
