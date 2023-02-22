@@ -6,6 +6,7 @@
 import math
 import json
 import logging
+import os
 from base64 import b64decode
 import win32gui
 from pyglet.graphics import Batch
@@ -69,11 +70,18 @@ CONFIG = {
 
 # Used to track unique crews
 crew_tracker = {}
+CREW_CACHE = []
+CREW_COLOR_DEFAULT = (192, 91, 0, 255)      # Orange
+CREW_COLOR_LIST = [(0, 255, 29, 255),       # Green
+                   (255, 0, 189, 255),      # Pink
+                   (255, 255, 0, 255),      # Yellow
+                   (255, 9, 10, 255),       # Red
+                   (204, 0, 204, 255)]      # Purple
 
 version = "1.5.0"
 
 # Config specification for logging file
-logging.basicConfig(filename='DougsESP.log', level=logging.DEBUG,
+logging.basicConfig(filename='../DougsESP.log', level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s %(message)s', filemode="w")
 logger = logging.getLogger()
 
@@ -81,8 +89,8 @@ logger = logging.getLogger()
 TEXT_OFFSET_X = 13
 TEXT_OFFSET_Y = -5
 TEXT_DPI = 300
-TEXT_FONT_NAME = "Calibri"
-TEXT_FONT_SIZE = 4
+TEXT_FONT_NAME = "CQ Mono"
+TEXT_FONT_SIZE = 5
 
 # Information on SoT height and width. Used here and in main.py to display
 # data to the screen. May need to manually override if wonky
@@ -100,7 +108,8 @@ except Exception as e:
 main_batch = Batch()
 
 # Load our offset json file
-with open("offsets.json") as infile:
+fPath = os.path.dirname(os.path.abspath(__file__))
+with open("data" + os.sep + "offsets.json") as infile:
     OFFSETS = json.load(infile)
 
 

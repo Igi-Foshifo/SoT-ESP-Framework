@@ -8,7 +8,7 @@ import ctypes.wintypes
 import struct
 import re
 import psutil
-from helpers import logger
+from utils.helpers import logger
 
 
 MAX_PATH = 260

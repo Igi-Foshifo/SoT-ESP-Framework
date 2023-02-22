@@ -5,7 +5,7 @@
 
 from pyglet.text import Label
 # from pyglet.shapes import Circle
-from helpers import calculate_distance, object_to_screen, main_batch, TEXT_OFFSET_X, TEXT_OFFSET_Y
+from utils.helpers import calculate_distance, object_to_screen, main_batch, TEXT_OFFSET_X, TEXT_OFFSET_Y
 from Modules.display_object import DisplayObject
 
 

@@ -5,9 +5,10 @@
 
 from pyglet.text import Label
 from pyglet.shapes import Circle
-from helpers import calculate_distance, object_to_screen, main_batch, \
-    TEXT_OFFSET_X, TEXT_OFFSET_Y, TEXT_DPI, TEXT_FONT_NAME, TEXT_FONT_SIZE
-from Modules.mapping import ships
+from utils.helpers import calculate_distance, object_to_screen, main_batch, \
+    TEXT_OFFSET_X, TEXT_OFFSET_Y, TEXT_DPI, TEXT_FONT_NAME, TEXT_FONT_SIZE, \
+    OFFSETS, CREW_CACHE, CREW_COLOR_DEFAULT, CREW_COLOR_LIST
+from data.mapping import ships
 from Modules.display_object import DisplayObject
 
 SHIP_COLOR = (100, 0, 0)  # The color we want the indicator circle to be
@@ -53,6 +54,8 @@ class Ship(DisplayObject):
                                           self.coord_offset)
         self.distance = calculate_distance(self.coords, self.my_coords)
 
+        self.ship_cached_crew_guid = self._build_ship_cached_crew_data()
+
         self.screen_coords = object_to_screen(self.my_coords, self.coords)
 
         # All of our actual display information & rendering
@@ -70,11 +73,13 @@ class Ship(DisplayObject):
         Uses the color specified in our globals w/ a size of 10px radius.
         Assigns the object to our batch & group
         """
+        ship_circle_color = self._build_ship_color()
+
         if self.screen_coords:
             return Circle(self.screen_coords[0], self.screen_coords[1],
-                          CIRCLE_SIZE, color=self.color, batch=main_batch)
+                          CIRCLE_SIZE, color=ship_circle_color, batch=main_batch)
 
-        return Circle(0, 0, CIRCLE_SIZE, color=self.color, batch=main_batch)
+        return Circle(0, 0, CIRCLE_SIZE, color=ship_circle_color, batch=main_batch)
 
     def _built_text_string(self) -> str:
         """
@@ -93,6 +98,9 @@ class Ship(DisplayObject):
         :rtype: Label
         :return: What text we want displayed next to the ship
         """
+
+        ship_text_color = self._build_ship_color()
+
         if self.screen_coords:
             return Label(self.text_str,
                          font_name=TEXT_FONT_NAME,
@@ -100,10 +108,44 @@ class Ship(DisplayObject):
                          x=self.screen_coords[0] + TEXT_OFFSET_X,
                          y=self.screen_coords[1] + TEXT_OFFSET_Y,
                          dpi=TEXT_DPI,
-                         batch=main_batch)
+                         batch=main_batch,
+                         color=ship_text_color,)
 
         return Label(self.text_str, font_name=TEXT_FONT_NAME, font_size=TEXT_FONT_SIZE,
-                     x=0, y=0, dpi=TEXT_DPI, batch=main_batch)
+                     x=0, y=0, dpi=TEXT_DPI, batch=main_batch, color=ship_text_color,)
+
+    def _build_ship_cached_crew_data(self):
+        """
+        Function to calculate the crew's guid based on currently parsed ship object
+
+        :rtype: tuple
+        :return: crew guid data based on ship object being parsed
+        """
+
+        crew_ownership_component = self.rm.read_ptr(self.address + OFFSETS.get('Ship.CrewOwnershipComponent'))
+
+        # struct Guid of 4 integers assigned to the Ship object as per Ship.CrewOwnershipComponent.
+        # these 4 guids will be used to compare the saved ('cached') crew guids calculated in the crews.py module
+        ship_crew_data = \
+            self.rm.read_int(
+                crew_ownership_component + OFFSETS.get("CrewOwnershipComponent.CachedCrewId") + 0), \
+            self.rm.read_int(
+                crew_ownership_component + OFFSETS.get("CrewOwnershipComponent.CachedCrewId") + 4), \
+            self.rm.read_int(
+                crew_ownership_component + OFFSETS.get("CrewOwnershipComponent.CachedCrewId") + 8), \
+            self.rm.read_int(
+                crew_ownership_component + OFFSETS.get("CrewOwnershipComponent.CachedCrewId") + 12)
+
+        return ship_crew_data
+
+    def _build_ship_color(self):
+        for x, _ in enumerate(CREW_CACHE):
+            if self.ship_cached_crew_guid == CREW_CACHE[x]["guid"]:
+                return CREW_CACHE[x]["color"]
+            else:
+                continue
+
+        return CREW_COLOR_DEFAULT
 
     def update(self, my_coords: dict):
         """

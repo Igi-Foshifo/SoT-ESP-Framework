@@ -5,9 +5,9 @@
 
 from pyglet.text import Label
 from pyglet.shapes import Circle
-from helpers import calculate_distance, object_to_screen, main_batch, \
+from utils.helpers import calculate_distance, object_to_screen, main_batch, \
     TEXT_OFFSET_X, TEXT_OFFSET_Y, TEXT_DPI, TEXT_FONT_NAME, TEXT_FONT_SIZE
-from Modules.mapping import ashenkey
+from data.mapping import ashenkey
 from Modules.display_object import DisplayObject
 
 ASHEN_KEY_COLOR = (205, 59, 36)

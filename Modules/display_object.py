@@ -5,8 +5,8 @@
 
 import struct
 import abc
-from helpers import OFFSETS
-from memory_helper import ReadMemory
+from utils.helpers import OFFSETS
+from utils.memory_helper import ReadMemory
 
 
 class DisplayObject(metaclass=abc.ABCMeta):

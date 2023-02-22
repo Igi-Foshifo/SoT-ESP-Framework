@@ -3,12 +3,12 @@
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
 For community support, please contact me on Discord: DougTheDruid#2784
 """
-from base64 import b64decode
 import pyglet
+import os
 from pyglet.text import Label
 from pyglet.gl import Config
-from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, version, logger, initialize_window
-from sot_hack import SoTMemoryReader
+from utils.helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, logger, initialize_window
+from utils.sot_hack import SoTMemoryReader
 
 
 # The FPS __Target__ for the program.
@@ -67,12 +67,6 @@ if __name__ == '__main__':
     # Initialize our SoT Hack object, and do a first run of reading actors
     smr = SoTMemoryReader()
 
-    # Custom Debug mode for using a literal python interpreter debugger
-    # to validate our fields. Does not generate a GUI.
-    if DEBUG:
-        while True:
-            smr.read_actors()
-
     # You may want to add/modify this custom config per the pyglet docs to
     # disable vsync or other options: https://tinyurl.com/45tcx6eu
     config = Config(double_buffer=True, depth_size=24, alpha_size=8)
@@ -98,11 +92,9 @@ if __name__ == '__main__':
         # Update our player count Label & crew list
         if smr.crew_data:
             player_count.text = f"Player Count: {smr.crew_data.total_players}"
-            crew_list.text = smr.crew_data.crew_str
 
         # Draw our main batch & FPS counter at the bottom left
         main_batch.draw()
-        fps_display.draw()
 
     # Initializing the window for writing
     init = initialize_window()
@@ -117,9 +109,7 @@ if __name__ == '__main__':
     # the actors we are interested in (from our generate_all). Runs as fast as possible
     pyglet.clock.schedule(update_graphics)
 
-    # Adds an FPS counter at the bottom left corner of our pyglet window
-    # Note: May not translate to actual FPS, but rather FPS of the program
-    fps_display = pyglet.window.FPSDisplay(window, color=(0, 255, 0, 255))
+    pyglet.font.add_file("assets" + os.sep + "font" + os.sep + "cq-mono.ttf")
 
     # Our base player_count label in the top-right of our screen. Updated
     # in on_draw(). Use a default of "Initializing", which will update once the

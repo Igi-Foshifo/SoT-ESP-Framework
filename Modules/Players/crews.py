@@ -4,8 +4,10 @@
 """
 
 import struct
-from helpers import OFFSETS, crew_tracker
+from utils.helpers import OFFSETS, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, \
+    crew_tracker, CREW_CACHE, CREW_COLOR_LIST
 from Modules.display_object import DisplayObject
+from pyglet.text import Label
 
 
 class Crews(DisplayObject):
@@ -44,12 +46,13 @@ class Crews(DisplayObject):
         self.total_players = sum(crew['size'] for crew in self.crew_info)
 
         # All of our actual display information & rendering
-        self.crew_str = self._built_text_string()
+        self.crew_labels = []
+        self.crew_str = self._built_text_render()
 
         # Used to track if the display object needs to be removed
         self.to_delete = False
 
-    def _built_text_string(self):
+    def _built_text_render(self):
         """
         Generates a string used for rendering. Separate function in the event
         you need to add more data or want to change formatting
@@ -59,7 +62,13 @@ class Crews(DisplayObject):
             # We store all of the crews in a tracker dictionary. This allows us
             # to assign each crew a "Short"-ID based on count on the server.
             short_id = crew_tracker.get(self.crew_info[x]['guid'], None)
-            output += f"Crew #{short_id} - {self.crew_info[x]['size']} Pirates\n"
+            self.crew_labels.append(Label(f'Crew #{short_id} - {self.crew_info[x]["size"]} Pirates',
+                                          color=self.crew_info[x]["color"],
+                                          x=SOT_WINDOW_W * 0.91,
+                                          y=SOT_WINDOW_H * 0.68 - (x * 15),
+                                          batch=main_batch,
+                                          width=300,
+                                          multiline=True))
 
         return output
 
@@ -75,6 +84,7 @@ class Crews(DisplayObject):
 
         # Will contain all of our condensed Crew Data
         crews_data = []
+        CREW_CACHE.clear()
 
         # For each crew on the server
         for x in range(0, crews[1]):
@@ -96,12 +106,14 @@ class Crews(DisplayObject):
             if crew[1] > 0:
                 crew_data = {
                     "guid": crew_guid,
-                    "size": crew[1]
+                    "size": crew[1],
+                    "color": CREW_COLOR_LIST[x],
                 }
                 crews_data.append(crew_data)
+                CREW_CACHE.append(crew_data)
                 if crew_guid not in crew_tracker:
-                    crew_tracker[crew_guid] = len(crew_tracker)+1
-                    
+                    crew_tracker[crew_guid] = len(crew_tracker) + 1
+
         return crews_data
 
     def update(self, my_coords):  # pylint: disable=unused-argument
@@ -116,7 +128,13 @@ class Crews(DisplayObject):
         """
         if self._get_actor_id(self.address) != self.actor_id:
             self.to_delete = True
+            for x in range(0, self.crew_labels):
+                self.crew_labels[x].delete()
+            self.crew_labels.clear()
             return
-        
+
+        for x in range(0, self.crew_labels):
+            self.crew_labels[x].visible = True
+
         self.crew_info = self._get_crews_info()
         self.crew_str = self._built_text_string()

@@ -5,9 +5,9 @@
 
 from pyglet.text import Label
 from pyglet.shapes import Circle
-from helpers import calculate_distance, object_to_screen, main_batch, \
+from utils.helpers import calculate_distance, object_to_screen, main_batch, \
     TEXT_OFFSET_X, TEXT_OFFSET_Y, TEXT_DPI, TEXT_FONT_NAME, TEXT_FONT_SIZE
-from Modules.mapping import lootmermaid
+from data.mapping import lootmermaid
 from Modules.display_object import DisplayObject
 
 LOOT_MERMAID_COLOR = (255, 255, 255)

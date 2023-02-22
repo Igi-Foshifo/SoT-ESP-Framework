@@ -6,9 +6,9 @@ For community support, please contact me on Discord: DougTheDruid#2784
 
 import struct
 import logging
-from memory_helper import ReadMemory
-from helpers import OFFSETS, CONFIG, logger
-from Modules.mapping \
+from utils.memory_helper import ReadMemory
+from utils.helpers import OFFSETS, CONFIG, logger
+from data.mapping \
     import \
     \
     ai_common_drops_keys, \
@@ -181,8 +181,7 @@ class SoTMemoryReader:
         )
         self.my_coords = self._coord_builder(
             manager,
-            OFFSETS.get('PlayerCameraManager.CameraCache')
-            + OFFSETS.get('CameraCacheEntry.MinimalViewInfo'),
+            OFFSETS.get('PlayerCameraManager.CameraCache') + OFFSETS.get('CameraCacheEntry.MinimalViewInfo'),
             fov=True)
 
     def _coord_builder(self, actor_address: int, offset=0x78, camera=True,

@@ -5,9 +5,9 @@
 
 from pyglet.text import Label
 from pyglet.shapes import Circle
-from helpers import calculate_distance, object_to_screen, main_batch, \
+from utils.helpers import calculate_distance, object_to_screen, main_batch, \
     TEXT_OFFSET_X, TEXT_OFFSET_Y, TEXT_DPI, TEXT_FONT_NAME, TEXT_FONT_SIZE
-from Modules.mapping import gems
+from data.mapping import gems
 from Modules.display_object import DisplayObject
 
 RUBY_COLOR = (255, 0, 0)
@@ -93,14 +93,14 @@ class Gem(DisplayObject):
             if "Ruby" in self.name:
                 return Circle(self.screen_coords[0], self.screen_coords[1],
                               CIRCLE_SIZE, color=RUBY_COLOR, batch=main_batch)
-            elif "Sapphire" in self.name:
+            if "Sapphire" in self.name:
                 return Circle(self.screen_coords[0], self.screen_coords[1],
                               CIRCLE_SIZE, color=SAPPHIRE_COLOR, batch=main_batch)
-            elif "Emerald" in self.name:
+            if "Emerald" in self.name:
                 return Circle(self.screen_coords[0], self.screen_coords[1],
                               CIRCLE_SIZE, color=EMERALD_COLOR, batch=main_batch)
 
-        return Circle(0, 0, CIRCLE_SIZE, color=self.color, x=0, y=0, batch=main_batch)
+        return Circle(0, 0, CIRCLE_SIZE, color=self.color, batch=main_batch)
 
     def _built_text_string(self) -> str:
         """
