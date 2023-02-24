@@ -174,8 +174,17 @@ class Ship(DisplayObject):
         self.screen_coords = object_to_screen(self.my_coords, self.coords)
 
         if self.screen_coords:
-            self.text_render.visible = True
-            self.icon.visible = True
+            # Ships have two actors dependent on distance. This switches them
+            # seamlessly at 1750m
+            if "Template" in self.raw_name and new_distance > 1750:
+                self.text_render.visible = False
+                self.icon.visible = False
+            elif "Template" not in self.raw_name and new_distance < 1750:
+                self.text_render.visible = False
+                self.icon.visible = False
+            else:
+                self.text_render.visible = True
+                self.icon.visible = True
 
             # Update the position of our circle and text
             self.icon.x = self.screen_coords[0]

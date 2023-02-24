@@ -6,6 +6,7 @@ For community support, please contact me on Discord: DougTheDruid#2784
 
 import struct
 import logging
+from pyglet.text import Label
 from utils.memory_helper import ReadMemory
 from utils.helpers import OFFSETS, CONFIG, logger
 from data.mapping \
@@ -79,6 +80,7 @@ from Modules.Loot.tome import Tome
 from Modules.Loot.trident import Trident
 
 # Map
+from Modules.Map.compass import Compass
 from Modules.Map.event import Event
 from Modules.Map.island import Island
 from Modules.Map.loot_mermaid import LootMermaid
@@ -235,6 +237,7 @@ class SoTMemoryReader:
 
         self.display_objects = []
         self.update_my_coords()
+
 
         actor_raw = self.rm.read_bytes(self.u_level + 0xa0, 0xC)
         actor_data = struct.unpack("<Qi", actor_raw)
@@ -469,6 +472,12 @@ class SoTMemoryReader:
 
             # --------------------------------- Map ------------------------------------#
 
+            # If we have Event ESP enabled in helpers.py and a camera y coordinate value,
+            # display the compass
+            if CONFIG.get('COMPASS_ENABLED') and self.my_coords['cam_y']:
+                compass = Compass(self.rm, actor_address, self.my_coords)
+                self.display_objects.append(compass)
+
             # If we have Event ESP enabled in helpers.py, and the name of the
             # actor is in our mapping.py event_keys object, interpret the actor
             # as an event
@@ -544,7 +553,10 @@ class SoTMemoryReader:
             # as a ship
             if CONFIG.get('SHIPS_ENABLED') and raw_name in ship_keys:
                 ship = Ship(self.rm, actor_id, actor_address, self.my_coords, raw_name)
-                self.display_objects.append(ship)
+                if "Template" not in ship.raw_name and ship.distance < 1740:
+                    continue
+                else:
+                    self.display_objects.append(ship)
 
             # If we have Shipwreck ESP enabled in helpers.py, and the name of the
             # actor is in our mapping.py shipwreck_keys object, interpret the actor

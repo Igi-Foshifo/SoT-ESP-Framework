@@ -7,15 +7,12 @@ import pyglet
 import os
 from pyglet.text import Label
 from pyglet.gl import Config
-from utils.helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, logger, initialize_window
+from utils.helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, logger
 from utils.sot_hack import SoTMemoryReader
 
 
 # The FPS __Target__ for the program.
 FPS_TARGET = 60
-
-# See explanation in Main, toggle for a non-graphical debug
-DEBUG = False
 
 # Pyglet clock used to track time via FPS
 clock = pyglet.clock.Clock()
@@ -58,12 +55,6 @@ def update_graphics(_):
 
 
 if __name__ == '__main__':
-    # logger.info(
-    #     b64decode("RG91Z1RoZURydWlkJ3MgRVNQIEZyYW1ld29yayBTdGFydGluZw==").decode("utf-8")
-    # )
-    logger.info("")
-    #logger.info(f"Hack Version: {version}")
-
     # Initialize our SoT Hack object, and do a first run of reading actors
     smr = SoTMemoryReader()
 
@@ -89,15 +80,11 @@ if __name__ == '__main__':
         """
         window.clear()
 
-        # Update our player count Label & crew list
-        if smr.crew_data:
-            player_count.text = f"Player Count: {smr.crew_data.total_players}"
-
         # Draw our main batch & FPS counter at the bottom left
         main_batch.draw()
 
-    # Initializing the window for writing
-    init = initialize_window()
+    # # Initializing the window for writing
+    # init = initialize_window()
 
     # We schedule an "update all" to scan all actors every 5seconds
     pyglet.clock.schedule_interval(generate_all, 5)
@@ -109,37 +96,17 @@ if __name__ == '__main__':
     # the actors we are interested in (from our generate_all). Runs as fast as possible
     pyglet.clock.schedule(update_graphics)
 
-    pyglet.font.add_file("assets" + os.sep + "font" + os.sep + "cq-mono.ttf")
-
-    # Our base player_count label in the top-right of our screen. Updated
-    # in on_draw(). Use a default of "Initializing", which will update once the
-    # hack is actually running
-    player_count = Label("...Initializing Framework...",
-                         x=SOT_WINDOW_W * 0.91,
-                         y=SOT_WINDOW_H * 0.7,
-                         batch=main_batch)
+    pyglet.font.add_file("resources" + os.sep + "font" + os.sep + "cq-mono.ttf")
 
     crosshair = Label("+",
                       font_size=15,
                       color=(0, 255, 0, 255),
-                      # x=SOT_WINDOW_W//2,
-                      # y=SOT_WINDOW_H//2,
                       x=SOT_WINDOW_W * .5,
                       y=SOT_WINDOW_H * .5,
                       anchor_x="center",
                       anchor_y="center",
                       batch=main_batch)
 
-    # The label for showing all players on the server under the count
-    # This purely INITIALIZES it does not inherently update automatically
-    crew_list = Label("",
-                      x=SOT_WINDOW_W * 0.91,
-                      y=SOT_WINDOW_H * 0.68,
-                      batch=main_batch,
-                      width=300,
-                      multiline=True)
-    # Note: The width of 300 is the max pixel width of a single line
-    # before auto-wrapping the text to the next line. Updated in on_draw()
 
     # Runs our application, targeting a specific refresh rate (1/60 = 60fps)
     pyglet.app.run(interval=1/FPS_TARGET)

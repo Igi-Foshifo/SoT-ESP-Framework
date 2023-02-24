@@ -7,10 +7,11 @@ import math
 import json
 import logging
 import os
-from base64 import b64decode
 import win32gui
+import configparser
+from os.path import exists
+from pathlib import Path
 from pyglet.graphics import Batch
-from pyglet.text import Label
 
 # True=Enabled & False=Disabled for each relevant config items
 # Below denotes mappings exist but not necessarily the module
@@ -48,6 +49,7 @@ CONFIG = {
     "TRIDENTS_ENABLED": False,  # Y
 
     # Map
+    "COMPASS_ENABLED": True,  # Y
     "EVENTS_ENABLED": False,  # Y
     "ISLANDS_ENABLED": False,  # N
     "LOOT_MERMAIDS_ENABLED": False,  # Y
@@ -67,6 +69,28 @@ CONFIG = {
     # Other
     "DEBUG_ENABLED": False  # ~
 }
+
+# set directories for reference throughout program
+ROOT_DIR = Path(__file__).parent.parent
+CONF_DIR = os.path.join(ROOT_DIR, 'conf')
+DATA_DIR = os.path.join(ROOT_DIR, 'data')
+MODULES_DIR = os.path.join(ROOT_DIR, 'Modules')
+RESOURCES_DIR = os.path.join(ROOT_DIR, 'resources')
+UTILS_DIR = os.path.join(ROOT_DIR, 'utils')
+
+# check if a config file exist
+# if not, create one
+# otherwise, load settings
+config = configparser.ConfigParser()
+if not exists(os.path.join(CONF_DIR, 'config.ini')):
+    # create base config file
+    config.add_section('AI_ESP')
+    config.set('AI_ESP', 'AIDROPS_ENABLED', 'True')
+
+    with open(CONF_DIR + "/config.ini", 'w') as configfile:
+        config.write(configfile)
+else:
+    print("found it!")
 
 # Used to track unique crews
 crew_tracker = {}
@@ -239,18 +263,3 @@ def calculate_distance(obj_to: dict, obj_from: dict) -> int:
     return int(math.sqrt((obj_to.get("x") - obj_from.get("x")) ** 2 +
                          (obj_to.get("y") - obj_from.get("y")) ** 2 +
                          (obj_to.get("z") - obj_from.get("z")) ** 2))
-
-
-def initialize_window():
-    """
-    Initializes our window with a given label
-    """
-    # b_label = Label(b64decode('RG91Z1RoZURydWlkJ3MgRVNQIEZyYW1ld29yaw==').decode("utf-8"),
-    #                 x=SOT_WINDOW_W - 537, y=10, font_size=24, bold=True,
-    #                 color=(127, 127, 127, 65), batch=main_batch)
-    
-    b_label = Label("",
-                    x=SOT_WINDOW_W - 537, y=10, font_size=24, bold=True,
-                    color=(127, 127, 127, 65), batch=main_batch)
-    
-    return b_label
