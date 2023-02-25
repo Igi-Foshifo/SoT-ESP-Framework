@@ -10,7 +10,6 @@ from pyglet.gl import Config
 from utils.helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, logger
 from utils.sot_hack import SoTMemoryReader
 
-
 # The FPS __Target__ for the program.
 FPS_TARGET = 60
 
@@ -40,10 +39,22 @@ def update_graphics(_):
     # Initialize a list of items which are no longer valid in this loop
     to_remove = []
 
+    for static_actor in smr.display_static_objects:
+        # Call the update function within the actor object
+        static_actor.update(smr.my_coords)
+
+        # If the actor isn't the actor we expect (per .update), prepare to nuke
+        if static_actor.to_delete:
+            to_remove.append(static_actor)
+
     # For each actor that is stored from the most recent run of read_actors
     for actor in smr.display_objects:
         # Call the update function within the actor object
         actor.update(smr.my_coords)
+
+        # update the compass coordinates as the players coordinates change
+        # compass.text = update_compass(round(smr.my_coords['cam_y']))
+        #test_label.text = smr.update_test_val()
 
         # If the actor isn't the actor we expect (per .update), prepare to nuke
         if actor.to_delete:
@@ -60,7 +71,7 @@ if __name__ == '__main__':
 
     # You may want to add/modify this custom config per the pyglet docs to
     # disable vsync or other options: https://tinyurl.com/45tcx6eu
-    config = Config(double_buffer=True, depth_size=24, alpha_size=8)
+    config = Config(double_buffer=True, depth_size=24, sample_buffers=1, samples=2, alpha_size=8)
 
     # Create an overlay window with Pyglet at the same size as our SoT Window
     window = pyglet.window.Window(SOT_WINDOW_W, SOT_WINDOW_H,
@@ -71,6 +82,7 @@ if __name__ == '__main__':
     # Move our window to the same location that our SoT Window is at
     window.set_location(SOT_WINDOW[0], SOT_WINDOW[1])
 
+
     @window.event
     def on_draw():
         """
@@ -80,8 +92,9 @@ if __name__ == '__main__':
         """
         window.clear()
 
-        # Draw our main batch & FPS counter at the bottom left
+        # Draw our main batch
         main_batch.draw()
+
 
     # # Initializing the window for writing
     # init = initialize_window()
@@ -97,6 +110,7 @@ if __name__ == '__main__':
     pyglet.clock.schedule(update_graphics)
 
     pyglet.font.add_file("resources" + os.sep + "font" + os.sep + "cq-mono.ttf")
+    pyglet.font.add_file("resources" + os.sep + "font" + os.sep + "univa.ttf")
 
     crosshair = Label("+",
                       font_size=15,
@@ -107,7 +121,6 @@ if __name__ == '__main__':
                       anchor_y="center",
                       batch=main_batch)
 
-
     # Runs our application, targeting a specific refresh rate (1/60 = 60fps)
-    pyglet.app.run(interval=1/FPS_TARGET)
+    pyglet.app.run(interval=1 / FPS_TARGET)
     # Note - ***Nothing past here will execute as app.run() is a loop***

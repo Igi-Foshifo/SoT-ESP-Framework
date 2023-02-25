@@ -58,6 +58,7 @@ CONFIG = {
     "STORM_ENABLED": False,  # Y
 
     # Players
+    "OXYGEN_ENABLED": True,  # Y
     "CREWS_ENABLED": True,  # Y
     "MERMAIDS_ENABLED": True,  # Y
 
@@ -95,12 +96,12 @@ else:
 # Used to track unique crews
 crew_tracker = {}
 CREW_CACHE = []
-CREW_COLOR_DEFAULT = (192, 91, 0, 255)      # Orange
-CREW_COLOR_LIST = [(0, 255, 29, 255),       # Green
-                   (255, 0, 189, 255),      # Pink
-                   (255, 255, 0, 255),      # Yellow
-                   (255, 9, 10, 255),       # Red
-                   (204, 0, 204, 255)]      # Purple
+CREW_COLOR_DEFAULT = (192, 91, 0, 255)  # Orange
+CREW_COLOR_LIST = [(0, 255, 29, 255),  # Green
+                   (255, 0, 189, 255),  # Pink
+                   (255, 255, 0, 255),  # Yellow
+                   (255, 9, 10, 255),  # Red
+                   (204, 0, 204, 255)]  # Purple
 
 version = "1.5.0"
 
@@ -110,11 +111,11 @@ logging.basicConfig(filename='../DougsESP.log', level=logging.DEBUG,
 logger = logging.getLogger()
 
 # Offset values for the text labels from the circles we draw to the screen
-TEXT_OFFSET_X = 13
+TEXT_OFFSET_X = 10
 TEXT_OFFSET_Y = -5
 TEXT_DPI = 300
-TEXT_FONT_NAME = "CQ Mono"
-TEXT_FONT_SIZE = 5
+TEXT_FONT_NAME = "Univa Nova"
+TEXT_FONT_SIZE = 4
 
 # Information on SoT height and width. Used here and in main.py to display
 # data to the screen. May need to manually override if wonky
@@ -151,7 +152,7 @@ def dot(array_1: tuple, array_2: tuple) -> float:
         return 0.0
 
     return array_1[0] * array_2[0] + array_1[1] \
-           * array_2[1] + array_1[2] * array_2[2]
+        * array_2[1] + array_1[2] * array_2[2]
 
 
 def object_to_screen(player: dict, actor: dict) -> tuple:

@@ -2,6 +2,7 @@
 @Author https://github.com/DougTheDruid
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
 """
+import struct
 
 from pyglet.text import Label
 from pyglet.shapes import Circle
@@ -109,10 +110,10 @@ class Ship(DisplayObject):
                          y=self.screen_coords[1] + TEXT_OFFSET_Y,
                          dpi=TEXT_DPI,
                          batch=main_batch,
-                         color=ship_text_color,)
+                         color=ship_text_color, )
 
         return Label(self.text_str, font_name=TEXT_FONT_NAME, font_size=TEXT_FONT_SIZE,
-                     x=0, y=0, dpi=TEXT_DPI, batch=main_batch, color=ship_text_color,)
+                     x=0, y=0, dpi=TEXT_DPI, batch=main_batch, color=ship_text_color, )
 
     def _build_ship_cached_crew_data(self):
         """
@@ -121,20 +122,13 @@ class Ship(DisplayObject):
         :rtype: tuple
         :return: crew guid data based on ship object being parsed
         """
-
         crew_ownership_component = self.rm.read_ptr(self.address + OFFSETS.get('Ship.CrewOwnershipComponent'))
+        crew_cache_id_array = self.rm.read_bytes(crew_ownership_component +
+                                                 OFFSETS.get("CrewOwnershipComponent.CachedCrewId"),
+                                                 16)
 
-        # struct Guid of 4 integers assigned to the Ship object as per Ship.CrewOwnershipComponent.
-        # these 4 guids will be used to compare the saved ('cached') crew guids calculated in the crews.py module
-        ship_crew_data = \
-            self.rm.read_int(
-                crew_ownership_component + OFFSETS.get("CrewOwnershipComponent.CachedCrewId") + 0), \
-            self.rm.read_int(
-                crew_ownership_component + OFFSETS.get("CrewOwnershipComponent.CachedCrewId") + 4), \
-            self.rm.read_int(
-                crew_ownership_component + OFFSETS.get("CrewOwnershipComponent.CachedCrewId") + 8), \
-            self.rm.read_int(
-                crew_ownership_component + OFFSETS.get("CrewOwnershipComponent.CachedCrewId") + 12)
+        # array of four ints. the combination of the 4 ints makes up the crew's unique id
+        ship_crew_data = struct.unpack("<iiii", crew_cache_id_array)
 
         return ship_crew_data
 

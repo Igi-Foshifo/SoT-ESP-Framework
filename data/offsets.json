@@ -1,6 +1,7 @@
 {
   "Actor.actorId": 24,
   "Actor.rootComponent": 360,
+  "AthenaPlayerCharacter.DrowningComponent": 3472,
   "CameraCacheEntry.MinimalViewInfo": 16,
   "Crew.Players": 32,
   "Crew.Size": 152,
@@ -11,8 +12,10 @@
   "GameInstance.LocalPlayers": 56,
   "LocalPlayer.PlayerController": 48,
   "MapTable.MapPins": 1256,
+  "Pawn.Size": 120,
   "PlayerCameraManager.CameraCache": 1088,
   "PlayerController.CameraManager": 1112,
+  "PlayerController.Pawn": 1080,
   "PlayerState.PlayerName": 976,
   "SceneComponent.ActorCoordinates": 300,
   "Ship.CrewOwnershipComponent": 1968,

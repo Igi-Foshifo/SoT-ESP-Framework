@@ -6,18 +6,17 @@ For community support, please contact me on Discord: DougTheDruid#2784
 
 import struct
 import logging
-from pyglet.text import Label
 from utils.memory_helper import ReadMemory
 from utils.helpers import OFFSETS, CONFIG, logger
 from data.mapping \
     import \
-    \
+ \
     ai_common_drops_keys, \
     ashlord_keys, \
     landai_keys, \
     oceanai_keys, \
     statue_keys, \
-    \
+ \
     animalcontain_keys, \
     ashenkey_keys, \
     emflags_keys, \
@@ -37,16 +36,16 @@ from data.mapping \
     skull_keys, \
     tomes_keys, \
     trident_keys, \
-    \
+ \
     event_keys, \
     island_keys, \
     lootmermaid_keys, \
     meg_keys, \
     outpost_keys, \
     storm_keys, \
-    \
+ \
     mermaid_keys, \
-    \
+ \
     rowboat_keys, \
     ship_keys, \
     shipwreck_keys
@@ -91,6 +90,7 @@ from Modules.Map.storm import Storm
 # Players
 from Modules.Players.crews import Crews
 from Modules.Players.mermaid import Mermaid
+from Modules.Players.oxygen import Oxygen
 
 # Ships
 from Modules.Ships.rowboat import Rowboat
@@ -149,6 +149,9 @@ class SoTMemoryReader:
             self.u_local_player + OFFSETS.get('LocalPlayer.PlayerController')
         )
 
+        self.my_athena_player_character = self.rm.read_ptr(self.player_controller +
+                                                           OFFSETS.get('PlayerController.Pawn'))
+
         self.my_coords = self._coord_builder(self.u_local_player)
         self.my_coords['fov'] = 90
 
@@ -156,6 +159,18 @@ class SoTMemoryReader:
         self.server_players = []
         self.display_objects = []
         self.crew_data = None
+
+        self.display_static_objects = []
+        self.compass_init = False
+        self.oxygen_init = False
+
+    def update_test_val(self) -> str:
+        test_val = self.rm.read_ptr(self.my_athena_player_character +
+                                    OFFSETS.get('AthenaPlayerCharacter.DrowningComponent'))
+        oxygen_val = self.rm.read_float(test_val +
+                                        OFFSETS.get('DrowningComponent.OxygenLevel'))
+
+        return str(oxygen_val)
 
     def _load_local_player(self) -> int:
         """
@@ -206,8 +221,8 @@ class SoTMemoryReader:
             actor_bytes = self.rm.read_bytes(actor_address + offset, 24)
             unpacked = struct.unpack("<ffffff", actor_bytes)
 
-        coordinate_dict = {"x": unpacked[0]/100, "y": unpacked[1]/100,
-                           "z": unpacked[2]/100}
+        coordinate_dict = {"x": unpacked[0] / 100, "y": unpacked[1] / 100,
+                           "z": unpacked[2] / 100}
         if camera:
             coordinate_dict["cam_x"] = unpacked[3]
             coordinate_dict["cam_y"] = unpacked[4]
@@ -238,7 +253,6 @@ class SoTMemoryReader:
         self.display_objects = []
         self.update_my_coords()
 
-
         actor_raw = self.rm.read_bytes(self.u_level + 0xa0, 0xC)
         actor_data = struct.unpack("<Qi", actor_raw)
 
@@ -251,7 +265,7 @@ class SoTMemoryReader:
             # We start by getting the ActorID for a given actor, and comparing
             # that ID to a list of "known" id's we cache in self.actor_name_map
             raw_name = ""
-            actor_address = int.from_bytes(level_actors_raw[(x*8):(x*8+8)], byteorder='little', signed=False)
+            actor_address = int.from_bytes(level_actors_raw[(x * 8):(x * 8 + 8)], byteorder='little', signed=False)
             actor_id = self.rm.read_int(
                 actor_address + OFFSETS.get('Actor.actorId')
             )
@@ -270,8 +284,7 @@ class SoTMemoryReader:
             # Ignore anything we cannot find a name for
             if not raw_name:
                 continue
-            
-            
+
             # ----------------------------------- PARSE ENABLED OPTIONS -------------------------------------#
 
             # --------------------------------- AI ------------------------------------#
@@ -472,11 +485,12 @@ class SoTMemoryReader:
 
             # --------------------------------- Map ------------------------------------#
 
-            # If we have Event ESP enabled in helpers.py and a camera y coordinate value,
-            # display the compass
-            if CONFIG.get('COMPASS_ENABLED') and self.my_coords['cam_y']:
-                compass = Compass(self.rm, actor_address, self.my_coords)
-                self.display_objects.append(compass)
+            # If we have Compass ESP enabled in helpers.py, create the
+            # compass static object and add to display array to update
+            if CONFIG.get('COMPASS_ENABLED') and not self.compass_init:
+                compass = Compass(self.rm, self.my_coords)
+                self.display_static_objects.append(compass)
+                self.compass_init = True
 
             # If we have Event ESP enabled in helpers.py, and the name of the
             # actor is in our mapping.py event_keys object, interpret the actor
@@ -537,6 +551,13 @@ class SoTMemoryReader:
                 mermaid = Mermaid(self.rm, actor_id, actor_address, self.my_coords, raw_name)
                 if mermaid.distance < 800:
                     self.display_objects.append(mermaid)
+
+            # If we have Oxygen ESP enabled in helpers.py, create the
+            # compass static object and add to display array to update
+            if CONFIG.get('OXYGEN_ENABLED') and not self.oxygen_init:
+                oxygen = Oxygen(self.rm, self.my_athena_player_character)
+                self.display_static_objects.append(oxygen)
+                self.oxygen_init = True
 
             # --------------------------------- Ships ------------------------------------#
 
