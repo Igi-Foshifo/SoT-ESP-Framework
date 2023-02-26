@@ -1,8 +1,3 @@
-"""
-@Author https://github.com/DougTheDruid
-@Source https://github.com/DougTheDruid/SoT-ESP-Framework
-For community support, please contact me on Discord: DougTheDruid#2784
-"""
 import pyglet
 import os
 from pyglet.text import Label
@@ -20,7 +15,7 @@ clock = pyglet.clock.Clock()
 def generate_all(_):
     """
     Triggers an entire read_actors call in our SoT Memory Reader. Will
-    re-populate all of the display objects if something entered the screen
+    re-populate all the display objects if something entered the screen
     or render distance.
     """
     smr.read_actors()
@@ -29,7 +24,7 @@ def generate_all(_):
 def update_graphics(_):
     """
     Our main graphical loop which updates all of our "interesting" items.
-    During a "full run" (update_all()), a list of the objects near us and we
+    During a "full run" (update_all()), a list of the objects near us, and we
     care about is generated. Each of those objects has a ".update()" method
     we use to re-poll data for that item (required per display_object.py)
     """
@@ -39,8 +34,10 @@ def update_graphics(_):
     # Initialize a list of items which are no longer valid in this loop
     to_remove = []
 
+    # Update static 'actors' or those ESP elements that don't actually have
+    # an assigned/identifiable actor but require memory reads and updating
     for static_actor in smr.display_static_objects:
-        # Call the update function within the actor object
+        # Call the update function within the object
         static_actor.update(smr.my_coords)
 
         # If the actor isn't the actor we expect (per .update), prepare to nuke
@@ -52,15 +49,11 @@ def update_graphics(_):
         # Call the update function within the actor object
         actor.update(smr.my_coords)
 
-        # update the compass coordinates as the players coordinates change
-        # compass.text = update_compass(round(smr.my_coords['cam_y']))
-        #test_label.text = smr.update_test_val()
-
         # If the actor isn't the actor we expect (per .update), prepare to nuke
         if actor.to_delete:
             to_remove.append(actor)
 
-    # Clean up any items which arent valid anymore
+    # Clean up any items which aren't valid anymore
     for removable in to_remove:
         smr.display_objects.remove(removable)
 
@@ -87,8 +80,7 @@ if __name__ == '__main__':
     def on_draw():
         """
         The event which our window uses to determine what to draw on the
-        screen. First clears the screen, then updates our player count, then
-        draws both our batch (think of a canvas) & fps display
+        screen. First clears the screen, then draws both our batch (think of a canvas)
         """
         window.clear()
 

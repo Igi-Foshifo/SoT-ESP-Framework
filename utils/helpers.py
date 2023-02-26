@@ -1,8 +1,3 @@
-"""
-@Author https://github.com/DougTheDruid
-@Source https://github.com/DougTheDruid/SoT-ESP-Framework
-"""
-
 import math
 import json
 import logging
@@ -75,7 +70,7 @@ CONFIG = {
 ROOT_DIR = Path(__file__).parent.parent
 CONF_DIR = os.path.join(ROOT_DIR, 'conf')
 DATA_DIR = os.path.join(ROOT_DIR, 'data')
-MODULES_DIR = os.path.join(ROOT_DIR, 'Modules')
+MODULES_DIR = os.path.join(ROOT_DIR, 'modules')
 RESOURCES_DIR = os.path.join(ROOT_DIR, 'resources')
 UTILS_DIR = os.path.join(ROOT_DIR, 'utils')
 
@@ -144,7 +139,7 @@ def dot(array_1: tuple, array_2: tuple) -> float:
     Longer Avail). Takes two lists and multiplies the same index across both
     lists, and adds them together. (Need Source)
     :param tuple array_1: Presumably some array about our player position
-    :param tuple array_2: Presumably some array about the dest actor position
+    :param tuple array_2: Presumably some array about the destination actor position
     :rtype: float
     :return: The result of a math equation between those two arrays
     """

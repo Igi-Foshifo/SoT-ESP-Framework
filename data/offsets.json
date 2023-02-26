@@ -3,6 +3,7 @@
   "Actor.rootComponent": 360,
   "AthenaPlayerCharacter.DrowningComponent": 3472,
   "CameraCacheEntry.MinimalViewInfo": 16,
+  "Crew.CrewSessionTemplate": 48,
   "Crew.Players": 32,
   "Crew.Size": 152,
   "CrewOwnershipComponent.CachedCrewId": 212,

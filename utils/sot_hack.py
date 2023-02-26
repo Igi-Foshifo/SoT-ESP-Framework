@@ -1,9 +1,3 @@
-"""
-@Author https://github.com/DougTheDruid
-@Source https://github.com/DougTheDruid/SoT-ESP-Framework
-For community support, please contact me on Discord: DougTheDruid#2784
-"""
-
 import struct
 import logging
 from utils.memory_helper import ReadMemory
@@ -51,51 +45,51 @@ from data.mapping \
     shipwreck_keys
 
 # AI
-from Modules.AI.ai_common_drop import AICommonDrop
-from Modules.AI.ashen_lord import AshenLord
-from Modules.AI.landai import LandAI
-from Modules.AI.oceanai import OceanAI
-from Modules.AI.statue import Statue
+from modules.AI.ai_common_drop import AICommonDrop
+from modules.AI.ashen_lord import AshenLord
+from modules.AI.landai import LandAI
+from modules.AI.oceanai import OceanAI
+from modules.AI.statue import Statue
 
 # Loot
-from Modules.Loot.animal_container import AnimalContainer
-from Modules.Loot.ashen_key import AshenKey
-from Modules.Loot.emissary_flag import EmissaryFlag
-from Modules.Loot.event_key import EventKey
-from Modules.Loot.gem import Gem
-from Modules.Loot.general_key import GeneralKey
-from Modules.Loot.gh_chests import GHChest
-from Modules.Loot.gh_relics import GHRelic
-from Modules.Loot.gifts import Gift
-from Modules.Loot.gunpowder import Gunpowder
-from Modules.Loot.medallion import Medallion
-from Modules.Loot.merchant_loot import MerchLoot
-from Modules.Loot.rare_loot import RareLoot
-from Modules.Loot.reaper_loot import ReaperLoot
-from Modules.Loot.resource import Resource
-from Modules.Loot.seafort_gold import SeaFortGold
-from Modules.Loot.skull import Skull
-from Modules.Loot.tome import Tome
-from Modules.Loot.trident import Trident
+from modules.Loot.animal_container import AnimalContainer
+from modules.Loot.ashen_key import AshenKey
+from modules.Loot.emissary_flag import EmissaryFlag
+from modules.Loot.event_key import EventKey
+from modules.Loot.gem import Gem
+from modules.Loot.general_key import GeneralKey
+from modules.Loot.gh_chests import GHChest
+from modules.Loot.gh_relics import GHRelic
+from modules.Loot.gifts import Gift
+from modules.Loot.gunpowder import Gunpowder
+from modules.Loot.medallion import Medallion
+from modules.Loot.merchant_loot import MerchLoot
+from modules.Loot.rare_loot import RareLoot
+from modules.Loot.reaper_loot import ReaperLoot
+from modules.Loot.resource import Resource
+from modules.Loot.seafort_gold import SeaFortGold
+from modules.Loot.skull import Skull
+from modules.Loot.tome import Tome
+from modules.Loot.trident import Trident
 
 # Map
-from Modules.Map.compass import Compass
-from Modules.Map.event import Event
-from Modules.Map.island import Island
-from Modules.Map.loot_mermaid import LootMermaid
-from Modules.Map.megs import Meg
-from Modules.Map.outpost import Outpost
-from Modules.Map.storm import Storm
+from modules.Map.compass import Compass
+from modules.Map.event import Event
+from modules.Map.island import Island
+from modules.Map.loot_mermaid import LootMermaid
+from modules.Map.megs import Meg
+from modules.Map.outpost import Outpost
+from modules.Map.storm import Storm
 
 # Players
-from Modules.Players.crews import Crews
-from Modules.Players.mermaid import Mermaid
-from Modules.Players.oxygen import Oxygen
+from modules.Players.crews import Crews
+from modules.Players.mermaid import Mermaid
+from modules.Players.oxygen import Oxygen
 
 # Ships
-from Modules.Ships.rowboat import Rowboat
-from Modules.Ships.ship import Ship
-from Modules.Ships.shipwreck import Shipwreck
+from modules.Ships.rowboat import Rowboat
+from modules.Ships.ship import Ship
+from modules.Ships.shipwreck import Shipwreck
 
 
 class SoTMemoryReader:
@@ -156,7 +150,6 @@ class SoTMemoryReader:
         self.my_coords['fov'] = 90
 
         self.actor_name_map = {}
-        self.server_players = []
         self.display_objects = []
         self.crew_data = None
 
@@ -191,7 +184,7 @@ class SoTMemoryReader:
         """
         Function to update the players coordinates and camera information
         storing that new info back into the my_coords field. Necessary as
-        we dont always run a full scan and we need a way to update ourselves
+        we don't always run a full scan, and we need a way to update ourselves
         """
         manager = self.rm.read_ptr(
             self.player_controller + OFFSETS.get('PlayerController.CameraManager')
@@ -256,11 +249,9 @@ class SoTMemoryReader:
         actor_raw = self.rm.read_bytes(self.u_level + 0xa0, 0xC)
         actor_data = struct.unpack("<Qi", actor_raw)
 
-        # Credit @mogistink https://www.unknowncheats.me/forum/members/3434160.html
         # One very large read for all the actors addresses to save us 1000+ reads every read_all
         level_actors_raw = self.rm.read_bytes(actor_data[0], actor_data[1] * 8)
 
-        self.server_players = []
         for x in range(0, actor_data[1]):
             # We start by getting the ActorID for a given actor, and comparing
             # that ID to a list of "known" id's we cache in self.actor_name_map
