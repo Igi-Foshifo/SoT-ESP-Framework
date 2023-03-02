@@ -1,6 +1,7 @@
 {
   "Actor.actorId": 24,
   "Actor.rootComponent": 360,
+  "AthenaCharacter.ShipTrackerComponent": 2296,
   "AthenaPlayerCharacter.DrowningComponent": 3472,
   "CameraCacheEntry.MinimalViewInfo": 16,
   "Crew.CrewSessionTemplate": 48,

@@ -64,10 +64,10 @@ if __name__ == '__main__':
 
     # You may want to add/modify this custom config per the pyglet docs to
     # disable vsync or other options: https://tinyurl.com/45tcx6eu
-    config = Config(double_buffer=True, depth_size=24, sample_buffers=1, samples=2, alpha_size=8)
+    config = Config(double_buffer=True, depth_size=24, alpha_size=8)
 
     # Create an overlay window with Pyglet at the same size as our SoT Window
-    window = pyglet.window.Window(SOT_WINDOW_W, SOT_WINDOW_H,
+    window = pyglet.window.Window(int(SOT_WINDOW_W), int(SOT_WINDOW_H),
                                   vsync=False, style='overlay', config=config,
                                   caption="")
     hwnd = window._hwnd  # pylint: disable=protected-access
@@ -86,10 +86,6 @@ if __name__ == '__main__':
 
         # Draw our main batch
         main_batch.draw()
-
-
-    # # Initializing the window for writing
-    # init = initialize_window()
 
     # We schedule an "update all" to scan all actors every 5seconds
     pyglet.clock.schedule_interval(generate_all, 5)

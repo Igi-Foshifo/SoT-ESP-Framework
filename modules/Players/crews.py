@@ -5,7 +5,7 @@
 
 import struct
 from utils.helpers import OFFSETS, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, \
-    crew_tracker, CREW_CACHE, CREW_COLOR_LIST
+    crew_tracker, CREW_CACHE, CREW_COLOR_LIST, TEXT_DPI
 from modules.display_object import DisplayObject
 from pyglet.text import Label
 
@@ -42,12 +42,9 @@ class Crews(DisplayObject):
         # Collect and store information about the crews on the server
         self.crew_info = self._get_crews_info()
 
-        # Sum all of the crew sizes into our total_players variable
-        self.total_players = sum(crew['size'] for crew in self.crew_info)
-
         # All of our actual display information & rendering
         self.crew_labels = []
-        self.crew_str = self._built_text_render()
+        self._built_text_render()
 
         # Used to track if the display object needs to be removed
         self.to_delete = False
@@ -57,22 +54,22 @@ class Crews(DisplayObject):
         Generates a string used for rendering. Separate function in the event
         you need to add more data or want to change formatting
         """
-        output = ""
+        for x in range(0, len(self.crew_labels)):
+            self.crew_labels[x].delete()
+        self.crew_labels.clear()
+
         for x, _ in enumerate(self.crew_info):  # x = crew number, _ = crew info
-            # We store all of the crews in a tracker dictionary. This allows us
+            # We store all the crews in a tracker dictionary. This allows us
             # to assign each crew a "Short"-ID based on count on the server.
             short_id = crew_tracker.get(self.crew_info[x]['guid'], None)
-            self.crew_labels.append(Label(f'Crew #{short_id : 3}'
-                                          f'{self.crew_info[x]["ship"] : 9}'
-                                          f'{self.crew_info[x]["size"]} Pirates',
+            lbl_text = f'Crew #{short_id} - {self.crew_info[x]["ship"]} - {self.crew_info[x]["size"]} Player(s)'
+            self.crew_labels.append(Label(lbl_text,
+                                          font_size=4,
+                                          dpi=TEXT_DPI,
                                           color=self.crew_info[x]["color"],
-                                          x=SOT_WINDOW_W * 0.01,
-                                          y=SOT_WINDOW_H * 0.68 - (x * 15),
-                                          batch=main_batch,
-                                          width=300,
-                                          multiline=True))
-
-        return output
+                                          x=int(SOT_WINDOW_W * 0.01),
+                                          y=int(SOT_WINDOW_H * 0.68 - (x * 20)),
+                                          batch=main_batch))
 
     def _get_crews_info(self):
         """
@@ -145,13 +142,14 @@ class Crews(DisplayObject):
         """
         if self._get_actor_id(self.address) != self.actor_id:
             self.to_delete = True
-            for x in range(0, self.crew_labels):
+            for x in range(0, len(self.crew_labels)):
                 self.crew_labels[x].delete()
             self.crew_labels.clear()
             return
+        else:
+            self.crew_info = self._get_crews_info()
+            self._built_text_render()
 
-        for x in range(0, self.crew_labels):
-            self.crew_labels[x].visible = True
-
-        self.crew_info = self._get_crews_info()
-        self.crew_str = self._built_text_string()
+            if self.crew_info:
+                for x in range(0, len(self.crew_labels)):
+                    self.crew_labels[x].visible = True

@@ -2,91 +2,32 @@ import math
 import json
 import logging
 import os
+from os.path import join
 import win32gui
-import configparser
-from os.path import exists
 from pathlib import Path
 from pyglet.graphics import Batch
+from conf.config import Config
 
-# True=Enabled & False=Disabled for each relevant config items
-# Below denotes mappings exist but not necessarily the module
-# Y = implemented
-# N = to do
-# ~ = working but incomplete/unsatisfactory
-CONFIG = {
-
-    # AI
-    "AIDROPS_ENABLED": True,  # Y
-    "ASHEN_LORD_ENABLED": False,  # Y
-    "LANDAI_ENABLED": True,  # Y
-    "OCEANAI_ENABLED": True,  # Y
-    "STATUES_ENABLED": True,  # Y
-
-    # Loot
-    "ANIMAL_CONTAINER_ENABLED": False,  # Y
-    "ASHEN_KEY_ENABLED": True,  # Y
-    "EMISSARY_FLAGS_ENABLED": False,  # Y
-    "EVENT_KEYS_ENABLED": True,  # Y
-    "GEMS_ENABLED": True,  # Y
-    "GENERAL_KEYS_ENABLED": True,  # Y
-    "GH_CHESTS_ENABLED": True,  # Y
-    "GH_RELICS_ENABLED": True,  # Y
-    "GIFTS_ENABLED": False,  # Y
-    "GUNPOWDER_ENABLED": True,  # Y
-    "MEDALLIONS_ENABLED": True,  # Y
-    "MERCHANT_LOOT_ENABLED": True,  # Y
-    "RARE_LOOT_ENABLED": True,  # Y
-    "REAPER_LOOT_ENABLED": False,  # Y
-    "RESOURCES_ENABLED": True,  # Y
-    "SEA_FORT_POUCH_ENABLED": True,  # Y
-    "SKULLS_ENABLED": True,  # Y
-    "TOMES_ENABLED": False,  # Y
-    "TRIDENTS_ENABLED": False,  # Y
-
-    # Map
-    "COMPASS_ENABLED": True,  # Y
-    "EVENTS_ENABLED": False,  # Y
-    "ISLANDS_ENABLED": False,  # N
-    "LOOT_MERMAIDS_ENABLED": False,  # Y
-    "MEGS_ENABLED": True,  # Y
-    "OUTPOSTS_ENABLED": False,  # N
-    "STORM_ENABLED": False,  # Y
-
-    # Players
-    "OXYGEN_ENABLED": True,  # Y
-    "CREWS_ENABLED": True,  # Y
-    "MERMAIDS_ENABLED": True,  # Y
-
-    # Ships
-    "ROWBOATS_ENABLED": True,  # Y
-    "SHIPS_ENABLED": True,  # Y
-    "SHIPWRECKS_ENABLED": True,  # Y
-
-    # Other
-    "DEBUG_ENABLED": False  # ~
-}
-
+# region Global Variables
 # set directories for reference throughout program
 ROOT_DIR = Path(__file__).parent.parent
-CONF_DIR = os.path.join(ROOT_DIR, 'conf')
-DATA_DIR = os.path.join(ROOT_DIR, 'data')
-MODULES_DIR = os.path.join(ROOT_DIR, 'modules')
-RESOURCES_DIR = os.path.join(ROOT_DIR, 'resources')
-UTILS_DIR = os.path.join(ROOT_DIR, 'utils')
+CONF_DIR = join(ROOT_DIR, 'conf')
+DATA_DIR = join(ROOT_DIR, 'data')
+MODULES_DIR = join(ROOT_DIR, 'modules')
+RESOURCES_DIR = join(ROOT_DIR, 'resources')
+UTILS_DIR = join(ROOT_DIR, 'utils')
 
-# check if a config file exist
-# if not, create one
-# otherwise, load settings
-config = configparser.ConfigParser()
-if not exists(os.path.join(CONF_DIR, 'config.ini')):
-    # create base config file
-    config.add_section('AI_ESP')
-    config.set('AI_ESP', 'AIDROPS_ENABLED', 'True')
+# For modules that are either active or inactive, we track if they've been initialized
+# NOTE: These modules do not require things such as distance calculations. They strictly
+# read from the player's actor values and thus do not depend on other dynamic variables
+MODULE_INIT_CONFIG = {
+    "COMPASS": False,
+    "OXYGEN": False,
+    "CREW": False
+}
 
-    with open(CONF_DIR + "/config.ini", 'w') as configfile:
-        config.write(configfile)
-else:
-    print("found it!")
+# Used to determine if a UI change has happened (ex. setting toggle)
+UPDATE_FLAG = False
 
 # Used to track unique crews
 crew_tracker = {}
@@ -98,19 +39,19 @@ CREW_COLOR_LIST = [(0, 255, 29, 255),  # Green
                    (255, 9, 10, 255),  # Red
                    (204, 0, 204, 255)]  # Purple
 
-version = "1.5.0"
-
-# Config specification for logging file
-logging.basicConfig(filename='../DougsESP.log', level=logging.DEBUG,
-                    format='%(asctime)s %(levelname)s %(message)s', filemode="w")
-logger = logging.getLogger()
-
 # Offset values for the text labels from the circles we draw to the screen
 TEXT_OFFSET_X = 10
 TEXT_OFFSET_Y = -5
 TEXT_DPI = 300
 TEXT_FONT_NAME = "Univa Nova"
 TEXT_FONT_SIZE = 4
+
+# Config specification for logging file
+logging.basicConfig(filename='../DougsESP.log',
+                    level=logging.DEBUG,
+                    format='%(asctime)s %(levelname)s %(message)s',
+                    filemode="w")
+logger = logging.getLogger()
 
 # Information on SoT height and width. Used here and in main.py to display
 # data to the screen. May need to manually override if wonky
@@ -127,12 +68,17 @@ except Exception as e:
 # as a piece of paper, so we save render cost because its 2D
 main_batch = Batch()
 
+cfg = Config(CONF_DIR)
+CONFIG = cfg.config
+
 # Load our offset json file
 fPath = os.path.dirname(os.path.abspath(__file__))
 with open("data" + os.sep + "offsets.json") as infile:
     OFFSETS = json.load(infile)
+# endregion
 
 
+# region Global Functions
 def dot(array_1: tuple, array_2: tuple) -> float:
     """
     Python-converted version of Gummy's External SoT v2 vMatrix Dot method (No
@@ -259,3 +205,4 @@ def calculate_distance(obj_to: dict, obj_from: dict) -> int:
     return int(math.sqrt((obj_to.get("x") - obj_from.get("x")) ** 2 +
                          (obj_to.get("y") - obj_from.get("y")) ** 2 +
                          (obj_to.get("z") - obj_from.get("z")) ** 2))
+# endregion

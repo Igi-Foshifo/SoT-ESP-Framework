@@ -1,3 +1,15 @@
+# store all dicts into a single dict
+mapping_raw_name_comp = {}
+
+# ---------------------------------------------------- Ships ---------------------------------------------------- #
+crews = {
+    "CrewService": {
+        "Name": "CrewService",
+    },
+}
+
+crew_keys = set(crews.keys())
+mapping_raw_name_comp.update(crews)
 
 # ---------------------------------------------------- Ships ---------------------------------------------------- #
 ships = {
@@ -36,6 +48,7 @@ ships = {
 }
 
 ship_keys = set(ships.keys())
+mapping_raw_name_comp.update(ships)
 
 # ---------------------------------------------------- Gems ---------------------------------------------------- #
 gems = {
@@ -69,6 +82,7 @@ gems = {
 }
 
 gem_keys = set(gems.keys())
+mapping_raw_name_comp.update(gems)
 
 # ---------------------------------------------------- Skulls ---------------------------------------------------- #
 skulls = {
@@ -129,6 +143,7 @@ skulls = {
 }
 
 skull_keys = set(skulls.keys())
+mapping_raw_name_comp.update(skulls)
 
 # ---------------------------------------------------- Shipwrecks ---------------------------------------------------- #
 shipwrecks = {
@@ -147,6 +162,7 @@ shipwrecks = {
 }
 
 shipwreck_keys = set(shipwrecks.keys())
+mapping_raw_name_comp.update(shipwrecks)
 
 # ---------------------------------------------------- Statues ---------------------------------------------------- #
 statues = {
@@ -162,6 +178,7 @@ statues = {
 }
 
 statue_keys = set(statues.keys())
+mapping_raw_name_comp.update(statues)
 
 # ---------------------------------------------------- Events ---------------------------------------------------- #
 events = {
@@ -186,6 +203,7 @@ events = {
 }
 
 event_keys = set(events.keys())
+mapping_raw_name_comp.update(events)
 
 # -------------------------------------------------- Ocean Enemies -------------------------------------------------- #
 oceanai = {
@@ -201,6 +219,7 @@ oceanai = {
 }
 
 oceanai_keys = set(oceanai.keys())
+mapping_raw_name_comp.update(oceanai)
 
 # -------------------------------------------------- Land Enemies -------------------------------------------------- #
 landai = {
@@ -222,6 +241,7 @@ landai = {
 }
 
 landai_keys = set(landai.keys())
+mapping_raw_name_comp.update(landai)
 
 # ---------------------------------------------------- Rowboats ---------------------------------------------------- #
 rowboats = {
@@ -237,6 +257,7 @@ rowboats = {
 }
 
 rowboat_keys = set(rowboats.keys())
+mapping_raw_name_comp.update(rowboats)
 
 # ---------------------------------------------------- Storm ---------------------------------------------------- #
 storm = {
@@ -246,6 +267,7 @@ storm = {
 }
 
 storm_keys = set(storm.keys())
+mapping_raw_name_comp.update(storm)
 
 # ---------------------------------------------------- Resources ---------------------------------------------------- #
 resources = {
@@ -306,6 +328,7 @@ resources = {
 }
 
 resource_keys = set(resources.keys())
+mapping_raw_name_comp.update(resources)
 
 # ---------------------------------------------------- AI Drops ---------------------------------------------------- #
 ai_common_drops = {
@@ -333,6 +356,7 @@ ai_common_drops = {
 }
 
 ai_common_drops_keys = set(ai_common_drops.keys())
+mapping_raw_name_comp.update(ai_common_drops)
 
 # ---------------------------------------------------- Megalodons ---------------------------------------------------- #
 megs = {
@@ -345,6 +369,7 @@ megs = {
 }
 
 meg_keys = set(megs.keys())
+mapping_raw_name_comp.update(megs)
 
 # ---------------------------------------------------- Ashen Lord ---------------------------------------------------- #
 ashlord = {
@@ -354,6 +379,7 @@ ashlord = {
 }
 
 ashlord_keys = set(ashlord.keys())
+mapping_raw_name_comp.update(ashlord)
 
 # ---------------------------------------------------- Mermaid ---------------------------------------------------- #
 mermaid = {
@@ -363,6 +389,7 @@ mermaid = {
 }
 
 mermaid_keys = set(mermaid.keys())
+mapping_raw_name_comp.update(mermaid)
 
 # -------------------------------------------------- Loot Mermaid -------------------------------------------------- #
 lootmermaid = {
@@ -372,6 +399,7 @@ lootmermaid = {
 }
 
 lootmermaid_keys = set(lootmermaid.keys())
+mapping_raw_name_comp.update(lootmermaid)
 
 # ------------------------------------------------ Animal Container ------------------------------------------------ #
 animalcontain = {
@@ -387,6 +415,7 @@ animalcontain = {
 }
 
 animalcontain_keys = set(animalcontain.keys())
+mapping_raw_name_comp.update(animalcontain)
 
 # ------------------------------------------------ Gunpowder Barrels ------------------------------------------------ #
 gunpowder = {
@@ -402,6 +431,7 @@ gunpowder = {
 }
 
 gunpowder_keys = set(gunpowder.keys())
+mapping_raw_name_comp.update(gunpowder)
 
 # ---------------------------------------------------- Gifts ---------------------------------------------------- #
 gifts = {
@@ -420,6 +450,7 @@ gifts = {
 }
 
 gifts_keys = set(gifts.keys())
+mapping_raw_name_comp.update(gifts)
 
 # --------------------------------------------------- Reaper Loot --------------------------------------------------- #
 reaploot = {
@@ -438,6 +469,7 @@ reaploot = {
 }
 
 reaploot_keys = set(reaploot.keys())
+mapping_raw_name_comp.update(reaploot)
 
 # --------------------------------------------------- Event Keys --------------------------------------------------- #
 eventkeys = {
@@ -465,6 +497,7 @@ eventkeys = {
 }
 
 eventkeys_keys = set(eventkeys.keys())
+mapping_raw_name_comp.update(eventkeys)
 
 # --------------------------------------------------- Ashen Key --------------------------------------------------- #
 ashenkey = {
@@ -474,6 +507,7 @@ ashenkey = {
 }
 
 ashenkey_keys = set(ashenkey.keys())
+mapping_raw_name_comp.update(ashenkey)
 
 # -------------------------------------------------- General Keys -------------------------------------------------- #
 genkey = {
@@ -552,6 +586,7 @@ genkey = {
 }
 
 genkey_keys = set(genkey.keys())
+mapping_raw_name_comp.update(genkey)
 
 # --------------------------------------------------- Tridents --------------------------------------------------- #
 trident = {
@@ -561,6 +596,7 @@ trident = {
 }
 
 trident_keys = set(trident.keys())
+mapping_raw_name_comp.update(trident)
 
 # -------------------------------------------------- Sea Fort Gold -------------------------------------------------- #
 sfgold = {
@@ -570,6 +606,7 @@ sfgold = {
 }
 
 sfgold_keys = set(sfgold.keys())
+mapping_raw_name_comp.update(sfgold)
 
 # -------------------------------------------------- Medallions -------------------------------------------------- #
 medallions = {
@@ -600,6 +637,7 @@ medallions = {
 }
 
 medallions_keys = set(medallions.keys())
+mapping_raw_name_comp.update(medallions)
 
 # ---------------------------------------------------- Islands ---------------------------------------------------- #
 islands = {
@@ -609,6 +647,7 @@ islands = {
 }
 
 island_keys = set(islands.keys())
+mapping_raw_name_comp.update(islands)
 
 # ---------------------------------------------------- Outposts ---------------------------------------------------- #
 outposts = {
@@ -618,6 +657,7 @@ outposts = {
 }
 
 outpost_keys = set(outposts.keys())
+mapping_raw_name_comp.update(outposts)
 
 # ---------------------------------------------------- Tomes ---------------------------------------------------- #
 tomes = {
@@ -684,6 +724,7 @@ tomes = {
 }
 
 tomes_keys = set(tomes.keys())
+mapping_raw_name_comp.update(tomes)
 
 # ------------------------------------------------- Emissary Flags ------------------------------------------------- #
 emflags = {
@@ -765,6 +806,7 @@ emflags = {
 }
 
 emflags_keys = set(emflags.keys())
+mapping_raw_name_comp.update(emflags)
 
 # ------------------------------------------------- Merchant Loot ------------------------------------------------- #
 merchantcrates = {
@@ -849,6 +891,7 @@ merchantcrates = {
 }
 
 merchantcrates_keys = set(merchantcrates.keys())
+mapping_raw_name_comp.update(merchantcrates)
 
 # ------------------------------------------------- GH Relics ------------------------------------------------- #
 ghrelics = {
@@ -951,6 +994,7 @@ ghrelics = {
 }
 
 ghrelics_keys = set(ghrelics.keys())
+mapping_raw_name_comp.update(ghrelics)
 
 # ------------------------------------------------- GH Chests ------------------------------------------------- #
 ghchests = {
@@ -1041,6 +1085,7 @@ ghchests = {
 }
 
 ghchests_keys = set(ghchests.keys())
+mapping_raw_name_comp.update(ghchests)
 
 # ------------------------------------------------- Rare Loot ------------------------------------------------- #
 rareloot = {
@@ -1095,6 +1140,7 @@ rareloot = {
 }
 
 rareloot_keys = set(rareloot.keys())
+mapping_raw_name_comp.update(rareloot)
 
 # ------------------------------------------------- Projectiles ------------------------------------------------- #
 projectiles = {
@@ -1110,3 +1156,6 @@ projectiles = {
 }
 
 projectiles_keys = set(projectiles.keys())
+mapping_raw_name_comp.update(projectiles)
+
+mapping_raw_name_keys = set(mapping_raw_name_comp.keys())

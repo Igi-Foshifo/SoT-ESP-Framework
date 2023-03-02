@@ -130,3 +130,6 @@ dmypy.json
 *idea*
 *SDK*
 *.log*
+
+# Configurations
+*.ini
